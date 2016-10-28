@@ -40,6 +40,7 @@ function parseDate(input, format) {
 }
 
 function checkUpdateInput() {
+	
 	var firstname = document.getElementById("firstname").value;
 	var lastname = document.getElementById("lastname").value;
 	var dob = document.getElementById("dob").value;
@@ -70,6 +71,7 @@ function checkUpdateInput() {
 		dobError.innerHTML = "Please enter date of birth.";
 		result = false;
 	} else {
+		
 		var date = parseDate(dob, "dd/mm/yyyy");
 		if (date == null) {
 			dobError.innerHTML = "Date of birth is not in correct format.";

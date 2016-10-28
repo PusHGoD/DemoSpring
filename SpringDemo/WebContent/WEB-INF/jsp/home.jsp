@@ -98,8 +98,7 @@
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-									<button type="button" class="btn btn-primary"
-										onclick="submit_form();">Save</button>
+									<button type="button" class="btn btn-primary" onclick="submit_form();">Save</button>
 								</div>
 
 							</div>

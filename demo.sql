@@ -2,7 +2,7 @@
 --
 -- Host: localhost    Database: springdemo
 -- ------------------------------------------------------
--- Server version	5.7.15-log
+-- Server version	5.7.16-log
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,10 +24,10 @@ DROP TABLE IF EXISTS `account`;
 /*!40101 SET character_set_client = utf8 */;
 CREATE TABLE `account` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `account_name` varchar(45) NOT NULL,
-  `password` varchar(45) NOT NULL,
-  `first_name` varchar(45) NOT NULL,
-  `last_name` varchar(45) NOT NULL,
+  `user_name` varchar(20) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `first_name` varchar(30) NOT NULL,
+  `last_name` varchar(30) NOT NULL,
   `date_of_birth` date NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
@@ -39,7 +39,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-24'),(2,'quangnnd','lazziness','Quang','Nguyen','1996-01-01'),(3,'baoht','baoluoivkl','Bao','Huynh','1996-01-01'),(4,'danhlt','123456','Danh','Le','1996-01-01');
+INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-27'),(2,'quangnnd','lazziness','Quang','Nguyen','1996-01-01'),(3,'baoht','baoluoivkl','Bao','Huynh','1996-01-01'),(4,'danhlt','123456','Danh','Le','1996-01-01');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-26 13:51:14
+-- Dump completed on 2016-10-28 11:37:48
