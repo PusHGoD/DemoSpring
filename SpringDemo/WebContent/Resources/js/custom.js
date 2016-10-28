@@ -26,13 +26,17 @@ function checkLoginInput() {
 }
 
 function parseDate(input, format) {
-	format = format || 'dd/mm/yyyy'; // somedefault format
-	var parts = input.match(/(\d+)/g), i = 0, fmt = {};
-	// extract date-part indexes from the format
-	format.replace(/(yyyy|dd|mm)/g, function(part) {
-		fmt[part] = i++;
-	});
-	return new Date(parts[fmt['yyyy']], parts[fmt['mm']] - 1, parts[fmt['dd']]);
+	if (input.match("\\d{1,2}[/]\\d{1,2}[/]\\d{1,4}")) {
+		format = format || 'dd/mm/yyyy';
+		var parts = input.match(/(\d+)/g), i = 0, fmt = {};
+		format.replace(/(yyyy|dd|mm)/g, function(part) {
+			fmt[part] = i++;
+		});
+		return new Date(parts[fmt['yyyy']], parts[fmt['mm']] - 1,
+				parts[fmt['dd']]);
+	} else {
+		return null;
+	}
 }
 
 function checkUpdateInput() {
@@ -61,12 +65,13 @@ function checkUpdateInput() {
 	} else {
 		lastnameError.innerHTML = "";
 	}
+
 	if (dob == null || dob == "") {
 		dobError.innerHTML = "Please enter date of birth.";
 		result = false;
 	} else {
-		var date = Date.parse(parseDate(dob, "dd/mm/yyyy"));
-		if (!isNaN(date.getTime())) {
+		var date = parseDate(dob, "dd/mm/yyyy");
+		if (date == null) {
 			dobError.innerHTML = "Date of birth is not in correct format.";
 			result = false;
 		} else {
@@ -74,4 +79,11 @@ function checkUpdateInput() {
 		}
 	}
 	return result;
+}
+
+function submit_form() {
+	var form = document.getElementById("editForm");
+	if (checkUpdateInput()) {
+		form.submit();
+	}
 }

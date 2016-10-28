@@ -42,7 +42,6 @@
 				Welcome, ${accountInfo.userName}! <a href="logout.htm" class="small">Log
 					out</a>
 			</h4>
-
 		</div>
 		<div class="panel panel-primary">
 			<div class="panel-heading panel-title">
@@ -62,7 +61,7 @@
 					<input type="button" data-toggle="modal" data-target="#myModal"
 						class="btn btn-control btn-lg" value="Edit" />
 				</form>
-				<form:form modelAttribute="user" action="home.htm">
+				<form:form modelAttribute="user" action="home.htm" id="editForm">
 					<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
 						aria-labelledby="myModalLabel" aria-hidden="true">
 						<div class="modal-dialog">
@@ -80,27 +79,27 @@
 										<form:input path="firstName" type="text" class="form-control"
 											value="${accountInfo.firstName}" placeholder="First name"
 											id="firstname" />
+										<div id="firstname_error" class="text-danger"></div>
 									</div>
-									<div id="firstname_error" class="text-danger"></div>
 									<div class="form-group">
 										Last name:
 										<form:input path="lastName" type="text" class="form-control"
 											value="${accountInfo.lastName}" placeholder="Last name"
 											id="lastname" />
+										<div id="lastname_error" class="text-danger"></div>
 									</div>
-									<div id="lastname_error" class="text-danger"></div>
 									<div class="form-group">
 										Date of birth: <input type="text" name="dateOfBirth"
 											data-provide="datepicker" class="form-control"
 											data-date-format="dd/mm/yyyy" value="${formatedDate}"
 											placeholder="dd/mm/yyyy" id="dob" />
+										<div id="dob_error" class="text-danger"></div>
 									</div>
-									<div id="dob_error" class="text-danger"></div>
 								</div>
 								<div class="modal-footer">
 									<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-									<input type="submit" class="btn btn-primary" value="Save"
-										onclick="return checkUpdateInput();" />
+									<button type="button" class="btn btn-primary"
+										onclick="submit_form();">Save</button>
 								</div>
 
 							</div>
