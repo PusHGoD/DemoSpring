@@ -37,70 +37,81 @@
 	<fmt:formatDate var="formatedDate" value="${accountInfo.dateOfBirth}"
 		pattern="dd/MM/yyyy" />
 	<div class="container">
-		<h2>Welcome, ${accountInfo.userName}!</h2>
-		<a href="logout.htm">Log out</a><br />
-		<h2>Your information:</h2>
-		<c:if test="${not empty successMessage}">
-			<div class="alert alert-success">${successMessage}</div>
-		</c:if>
-		<c:if test="${not empty errorMessage}">
-			<div class="alert alert-danger">${errorMessage}</div>
-		</c:if>
-		<form>
-			<div class="form-group">First name: ${accountInfo.firstName}</div>
-			<div class="form-group">Last name: ${accountInfo.lastName}</div>
-			<div class="form-group">Date of birth: ${formatedDate}</div>
-			<input type="button" data-toggle="modal" data-target="#myModal"
-				class="btn btn-control btn-lg" value="Edit" />
-		</form>
-	</div>
-	<form:form modelAttribute="user" action="home.htm">
-		<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
-			aria-labelledby="myModalLabel" aria-hidden="true">
-			<div class="modal-dialog">
-				<div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal"
-							aria-hidden="true">×</button>
-						<h4 class="modal-title">Edit profile</h4>
-					</div>
-					<div class="modal-body">
-						<form:hidden path="id" value="${accountInfo.id}" />
-						<form:hidden path="userName" value="${accountInfo.userName}" />
-						<div class="form-group">
-							First name:
-							<form:input path="firstName" type="text" class="form-control"
-								value="${accountInfo.firstName}" placeholder="First name"
-								id="firstname" />
-						</div>
-						<div id="firstname_error" class="alert-danger"></div>
-						<div class="form-group">
-							Last name:
-							<form:input path="lastName" type="text" class="form-control"
-								value="${accountInfo.lastName}" placeholder="Last name"
-								id="lastname" />
-						</div>
-						<div id="lastname_error" class="alert-danger"></div>
-						<div class="form-group">
-							Date of birth: <input type="text" name="dateOfBirth"
-								data-provide="datepicker" class="form-control"
-								data-date-format="dd/mm/yyyy" value="${formatedDate}"
-								placeholder="dd/mm/yyyy" id="dob" />
-						</div>
-						<div id="dob_error" class="alert-danger"></div>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-						<input type="submit" class="btn btn-primary" value="Save"
-							onclick="return checkUpdateInput();" />
-					</div>
+		<div class="page-heading">
+			<h4>
+				Welcome, ${accountInfo.userName}! <a href="logout.htm" class="small">Log
+					out</a>
+			</h4>
 
-				</div>
-				<!-- /.modal-content -->
-			</div>
-			<!-- /.modal-dialog -->
 		</div>
-		<!-- /.modal -->
-	</form:form>
+		<div class="panel panel-primary">
+			<div class="panel-heading panel-title">
+				<h3>Your information:</h3>
+			</div>
+			<div class="panel-body">
+				<c:if test="${not empty successMessage}">
+					<div class="alert alert-success">${successMessage}</div>
+				</c:if>
+				<c:if test="${not empty errorMessage}">
+					<div class="alert alert-danger">${errorMessage}</div>
+				</c:if>
+				<form>
+					<div class="form-group">First name: ${accountInfo.firstName}</div>
+					<div class="form-group">Last name: ${accountInfo.lastName}</div>
+					<div class="form-group">Date of birth: ${formatedDate}</div>
+					<input type="button" data-toggle="modal" data-target="#myModal"
+						class="btn btn-control btn-lg" value="Edit" />
+				</form>
+				<form:form modelAttribute="user" action="home.htm">
+					<div class="modal fade" id="myModal" tabindex="-1" role="dialog"
+						aria-labelledby="myModalLabel" aria-hidden="true">
+						<div class="modal-dialog">
+							<div class="modal-content">
+								<div class="modal-header">
+									<button type="button" class="close" data-dismiss="modal"
+										aria-hidden="true">×</button>
+									<h4 class="modal-title">Edit profile</h4>
+								</div>
+								<div class="modal-body">
+									<form:hidden path="id" value="${accountInfo.id}" />
+									<form:hidden path="userName" value="${accountInfo.userName}" />
+									<div class="form-group">
+										First name:
+										<form:input path="firstName" type="text" class="form-control"
+											value="${accountInfo.firstName}" placeholder="First name"
+											id="firstname" />
+									</div>
+									<div id="firstname_error" class="text-danger"></div>
+									<div class="form-group">
+										Last name:
+										<form:input path="lastName" type="text" class="form-control"
+											value="${accountInfo.lastName}" placeholder="Last name"
+											id="lastname" />
+									</div>
+									<div id="lastname_error" class="text-danger"></div>
+									<div class="form-group">
+										Date of birth: <input type="text" name="dateOfBirth"
+											data-provide="datepicker" class="form-control"
+											data-date-format="dd/mm/yyyy" value="${formatedDate}"
+											placeholder="dd/mm/yyyy" id="dob" />
+									</div>
+									<div id="dob_error" class="text-danger"></div>
+								</div>
+								<div class="modal-footer">
+									<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
+									<input type="submit" class="btn btn-primary" value="Save"
+										onclick="return checkUpdateInput();" />
+								</div>
+
+							</div>
+							<!-- /.modal-content -->
+						</div>
+						<!-- /.modal-dialog -->
+					</div>
+					<!-- /.modal -->
+				</form:form>
+			</div>
+		</div>
+	</div>
 </body>
 </html>

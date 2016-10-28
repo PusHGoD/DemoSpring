@@ -32,16 +32,18 @@
 			<div class="alert alert-danger">${errorMessage}</div>
 		</c:if>
 		<form:form modelAttribute="user" action="login.htm">
-			Username:
-		<form:input type="text" path="userName" class="form-control"
-				placeholder="Username" id="username" />
-			<div id="username_error" class="alert-danger"></div>
-			<br />
-			Password:
-		<form:password path="password" class="form-control"
-				placeholder="Password" id="password" />
-			<div id="password_error" class="alert-danger"></div>
-			<br />
+			<div class="form-group">
+				Username:
+				<form:input type="text" path="userName" class="form-control"
+					placeholder="Username" id="username" />
+				<div id="username_error" class="text-danger"></div>
+			</div>
+			<div class="form-group">
+				Password:
+				<form:password path="password" class="form-control"
+					placeholder="Password" id="password" />
+				<div id="password_error" class="text-danger"></div>
+			</div>
 			<input type="submit" value="Login"
 				class="btn btn-primary btn-lg btn-block"
 				onclick="return checkLoginInput();" />
