@@ -21,9 +21,9 @@
 	<mvc:resources mapping="/Resources/**" location="/Resources/" />
 
 
-	<bean class="com.spring.dao.AccountDAOImpl">
+	<bean class="com.spring.dao.impl.AccountDAOImpl">
 	</bean>
-	<bean class="com.spring.utils.MySQLUtils">
+	<bean class="com.spring.utils.impl.MySQLUtils">
 	</bean>
 
 </beans>

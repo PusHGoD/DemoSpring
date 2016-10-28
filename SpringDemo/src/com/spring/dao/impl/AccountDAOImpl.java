@@ -1,4 +1,4 @@
-package com.spring.dao;
+package com.spring.dao.impl;
 
 import java.io.Serializable;
 import java.sql.Connection;
@@ -7,11 +7,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.spring.dao.AccountDAO;
 import com.spring.model.Account;
 import com.spring.utils.DBUtils;
 
@@ -47,6 +47,12 @@ public class AccountDAOImpl implements AccountDAO, Serializable {
 				return account;
 			}
 		} finally {
+			if (rs != null) {
+				rs.close();
+			}
+			if (statement != null) {
+				statement.close();
+			}
 			if (con != null) {
 				con.close();
 			}
@@ -57,7 +63,6 @@ public class AccountDAOImpl implements AccountDAO, Serializable {
 	public boolean updateInfo(Account account) throws SQLException {
 		Connection con = null;
 		PreparedStatement statement = null;
-		ResultSet rs = null;
 		try {
 			con = utils.getConnection();
 			int id = account.getId();
@@ -76,6 +81,9 @@ public class AccountDAOImpl implements AccountDAO, Serializable {
 				return true;
 			}
 		} finally {
+			if (statement != null) {
+				statement.close();
+			}
 			if (con != null) {
 				con.close();
 			}
