@@ -7,6 +7,7 @@ import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -17,10 +18,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.dao.AccountDAO;
 import com.spring.model.Account;
+import com.spring.utils.impl.MySQLUtils;
 
 @Controller
 @RequestMapping("")
 public class AccountController {
+
+	private static Logger logger = Logger.getLogger(AccountController.class.getName());
 
 	@Autowired
 	private AccountDAO dao;
@@ -43,6 +47,7 @@ public class AccountController {
 			}
 		} catch (SQLException e) {
 			model.put("errorMessage", "Error occurred in processing login!");
+			logger.error("Error occurred in processing login!");
 		}
 		return "login";
 	}
@@ -61,7 +66,7 @@ public class AccountController {
 			try {
 				dob = sdf.parse(dateOfBirth);
 			} catch (ParseException e) {
-				e.printStackTrace();
+				logger.error("Inputted date cannot be parsed : " + dateOfBirth);
 			}
 			account.setDateOfBirth(dob);
 			boolean result = dao.updateInfo(account);
@@ -75,6 +80,7 @@ public class AccountController {
 			}
 		} catch (SQLException e) {
 			model.put("errorMessage", "An Unknown error has occurred in updating account!");
+			logger.error("Database has met error : " + e.getMessage());
 		}
 		return "home";
 	}
