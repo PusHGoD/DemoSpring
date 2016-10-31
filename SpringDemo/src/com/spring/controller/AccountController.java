@@ -18,7 +18,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.dao.AccountDAO;
 import com.spring.model.Account;
-import com.spring.utils.impl.MySQLUtils;
 
 @Controller
 @RequestMapping("")

@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.spring.dao.AccountDAO;
 import com.spring.model.Account;
 import com.spring.utils.DBUtils;
-import com.spring.utils.impl.MySQLUtils;
 
 @SuppressWarnings("serial")
 public class AccountDAOImpl implements AccountDAO, Serializable {
