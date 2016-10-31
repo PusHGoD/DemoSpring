@@ -18,32 +18,41 @@
 <!-- Latest compiled bootstrap JavaScript -->
 <script
 	src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<!-- Custom javascript file (mostly validation) -->
 <script type="text/javascript"
 	src='<c:url value="/Resources/js/custom.js"/>'></script>
 <title>Login Page</title>
 </head>
 <body>
+	<!-- If user has logged in, redirect to home page -->
 	<c:if test="${not empty accountInfo}">
 		<c:redirect url="/home.htm" />
 	</c:if>
+	<!-- Container div -->
 	<div class="container">
+		<!-- Header -->
 		<h1>Login</h1>
+		<!-- Error message -->
 		<c:if test="${not empty errorMessage}">
 			<div class="alert alert-danger">${errorMessage}</div>
 		</c:if>
+		<!-- Login form -->
 		<form:form modelAttribute="user" action="login.htm">
+			<!-- User name -->
 			<div class="form-group">
 				Username:
 				<form:input type="text" path="userName" class="form-control"
 					placeholder="Username" id="username" />
 				<div id="username_error" class="text-danger"></div>
 			</div>
+			<!-- Password -->
 			<div class="form-group">
 				Password:
 				<form:password path="password" class="form-control"
 					placeholder="Password" id="password" />
 				<div id="password_error" class="text-danger"></div>
 			</div>
+			<!-- Login button -->
 			<input type="submit" value="Login"
 				class="btn btn-primary btn-lg btn-block"
 				onclick="return checkLoginInput();" />

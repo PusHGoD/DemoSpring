@@ -2,6 +2,9 @@ package com.spring.model;
 
 import java.util.Date;
 
+/**
+ * @author HuanPM Account model
+ */
 public class Account {
 
 	private int id;
