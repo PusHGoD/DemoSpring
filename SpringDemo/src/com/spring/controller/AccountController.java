@@ -1,6 +1,5 @@
 package com.spring.controller;
 
-import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.spring.dao.AccountDAO;
-import com.spring.model.Account;
+import com.spring.entity.Account;
 
 /**
  * @author HuanPM Controller of account
@@ -54,27 +53,19 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.POST)
 	public String login(ModelMap model, @ModelAttribute("user") Account account, HttpSession session) {
-		try {
-			// Log in and get account information
-			Account result = dao.checkLogin(account.getUserName(), account.getPassword());
-			// Check if user logged in successfully
-			if (result != null) {
-				// Set session attribute to account information
-				session.setAttribute("accountInfo", result);
-				// Redirect to home page
-				return "redirect:/home.htm";
-			} else {
-				// Put error message to login page
-				model.put("errorMessage", "Invalid username or password");
-				return "login";
-			}
-		} catch (SQLException e) {
+		// Log in and get account information
+		Account result = dao.checkLogin(account.getUserName(), account.getPassword());
+		// Check if user logged in successfully
+		if (result != null) {
+			// Set session attribute to account information
+			session.setAttribute("accountInfo", result);
+			// Redirect to home page
+			return "redirect:/home.htm";
+		} else {
 			// Put error message to login page
-			model.put("errorMessage", "Error occurred in processing login!");
-			// Log SQL error message
-			logger.error("Error occurred in processing login!");
+			model.put("errorMessage", "Invalid username or password");
+			return "login";
 		}
-		return "login";
 	}
 
 	/**
@@ -96,40 +87,32 @@ public class AccountController {
 	@RequestMapping(value = "/home", method = RequestMethod.POST)
 	public String updateInfo(ModelMap model, @ModelAttribute("user") Account account,
 			@RequestParam("dateOfBirth") String dateOfBirth, HttpSession session) {
+		// Convert string dateOfBirth to Date object
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		Date dob = new Date();
 		try {
-			// Convert string dateOfBirth to Date object
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			Date dob = new Date();
-			try {
-				dob = sdf.parse(dateOfBirth);
-			} catch (ParseException e) {
-				// Log parse error message
-				logger.error("Inputted date cannot be parsed : " + dateOfBirth);
-			}
-			account.setDateOfBirth(dob);
-			// Update account and get result
-			boolean result = dao.updateInfo(account);
-			// Check if update operation is successful
-			if (result) {
-				// Update session account attribute
-				session.setAttribute("accountInfo", account);
-				// Put success message to home page
-				model.put("successMessage", "Your information has been updated!");
-				// Redirect to home page
-				return "home";
-			} else {
-				// Put error message to home page
-				model.put("errorMessage", "Error in updating account! No update processed");
-				// Redirect to home page
-				return "home";
-			}
-		} catch (SQLException e) {
-			// Put error message to home page
-			model.put("errorMessage", "An Unknown error has occurred in updating account!");
-			// Log SQL error message
-			logger.error("Database has met unknown error : " + e.getMessage());
+			dob = sdf.parse(dateOfBirth);
+		} catch (ParseException e) {
+			// Log parse error message
+			logger.error("Inputted date cannot be parsed : " + dateOfBirth);
 		}
-		return "home";
+		account.setDateOfBirth(dob);
+		// Update account and get result
+		boolean result = dao.updateInfo(account);
+		// Check if update operation is successful
+		if (result) {
+			// Update session account attribute
+			session.setAttribute("accountInfo", account);
+			// Put success message to home page
+			model.put("successMessage", "Your information has been updated!");
+			// Redirect to home page
+			return "home";
+		} else {
+			// Put error message to home page
+			model.put("errorMessage", "Error in updating account! No update processed");
+			// Redirect to home page
+			return "home";
+		}
 	}
 
 	/**

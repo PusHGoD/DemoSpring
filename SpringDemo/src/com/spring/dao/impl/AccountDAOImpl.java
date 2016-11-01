@@ -1,17 +1,16 @@
 package com.spring.dao.impl;
 
 import java.io.Serializable;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
 
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.spring.dao.AccountDAO;
-import com.spring.model.Account;
-import com.spring.utils.DBUtils;
+import com.spring.entity.Account;
 
 /**
  * @author HuanPM Implementation of account DAO
@@ -20,10 +19,10 @@ import com.spring.utils.DBUtils;
 public class AccountDAOImpl implements AccountDAO, Serializable {
 
 	/**
-	 * Autowired database utility
+	 * Autowired session factory
 	 */
 	@Autowired
-	private DBUtils utils;
+	SessionFactory sessionFactory;
 
 	/*
 	 * (non-Javadoc)
@@ -31,49 +30,31 @@ public class AccountDAOImpl implements AccountDAO, Serializable {
 	 * @see com.spring.dao.AccountDAO#checkLogin(java.lang.String,
 	 * java.lang.String)
 	 */
-	public Account checkLogin(String username, String password) throws SQLException {
-		Connection con = null;
-		PreparedStatement statement = null;
-		ResultSet rs = null;
-		try {
-			// Get connection from database
-			con = utils.getConnection();
-			// If connection is made, continue operation
-			if (con != null) {
-				// Set up SQL query
-				String sql = "SELECT * FROM account WHERE user_name = ? and password = ?";
-				statement = con.prepareStatement(sql);
-				statement.setString(1, username);
-				statement.setString(2, password);
-				// Execute SQL query and get ResultSet
-				rs = statement.executeQuery();
-				// If the query has result, get account information
-				if (rs.next()) {
-					int id = rs.getInt("id");
-					String firstName = rs.getString("first_name");
-					String lastName = rs.getString("last_name");
-					Date dob = rs.getDate("date_of_birth");
-					Account account = new Account(id, username, password, firstName, lastName, dob);
-					// Return account information
-					return account;
-				}
-			}
-		} finally {
-			// Close connection of ResultSet
-			if (rs != null) {
-				rs.close();
-			}
-			// Close connection of PreparedStatement
-			if (statement != null) {
-				statement.close();
-			}
-			// Close connection of Connection
-			if (con != null) {
-				con.close();
-			}
-		}
+	public Account checkLogin(String username, String password) {
+		// Account account = null;
+		// try {
+		// Session session = sessionFactory.openSession();
+		// Query query = session.createQuery("FROM Account as a WHERE
+		// a.userName = :userName and a.password = :password");
+		// query.setParameter("userName", username);
+		// query.setParameter("password", password);
+		// account = (Account) query.getSingleResult();
+		// } catch (NoResultException e) {
+		// account = null;
+		// }
+
+		// Open session
+		Session session = sessionFactory.openSession();
+		// Query with criteria object
+		Criteria criteria = session.createCriteria(Account.class.getName());
+		criteria.add(Restrictions.eq("userName", username));
+		criteria.add(Restrictions.eq("password", password));
+		// Get result
+		Account account = (Account) criteria.uniqueResult();
+		// Close session
+		session.close();
 		// Return null if none of above conditions are met
-		return null;
+		return account;
 	}
 
 	/*
@@ -81,44 +62,27 @@ public class AccountDAOImpl implements AccountDAO, Serializable {
 	 * 
 	 * @see com.spring.dao.AccountDAO#updateInfo(com.spring.model.Account)
 	 */
-	public boolean updateInfo(Account account) throws SQLException {
-		Connection con = null;
-		PreparedStatement statement = null;
-		try {
-			// Get connection from database
-			con = utils.getConnection();
-			// If connection is made, continue operation
-			if (con != null) {
-				// Get account information from argument
-				int id = account.getId();
-				String firstName = account.getFirstName();
-				String lastName = account.getLastName();
-				Date dob = account.getDateOfBirth();
-				// Set up SQL update statement
-				String sql = "UPDATE account SET first_name = ?, last_name = ?, date_of_birth = ? WHERE id = ?";
-				statement = con.prepareStatement(sql);
-				statement.setString(1, firstName);
-				statement.setString(2, lastName);
-				// Convert java.util.Date to java.sql.Date
-				java.sql.Date sqlDOB = new java.sql.Date(dob.getTime());
-				statement.setDate(3, sqlDOB);
-				statement.setInt(4, id);
-				// Execute update
-				int up = statement.executeUpdate();
-				// If there are any rows affected, return true
-				if (up > 0) {
-					return true;
-				}
-			}
-		} finally {
-			// Close connection of PreparedStatement
-			if (statement != null) {
-				statement.close();
-			}
-			// Close connection of Connection
-			if (con != null) {
-				con.close();
-			}
+	public boolean updateInfo(Account account) {
+		// Open session
+		Session session = sessionFactory.openSession();
+		// Begin transaction
+		session.beginTransaction();
+		// Set up HQL query
+		Query query = session.createQuery(
+				"UPDATE Account as a SET firstName=:firstName, lastName = :lastName, dateOfBirth=:dateOfBirth WHERE id=:id");
+		query.setParameter("firstName", account.getFirstName());
+		query.setParameter("lastName", account.getLastName());
+		query.setParameter("dateOfBirth", account.getDateOfBirth());
+		query.setParameter("id", account.getId());
+		// Update account info
+		int result = query.executeUpdate();
+		// Commit to DB
+		session.getTransaction().commit();
+		// Close session
+		session.close();
+		// Return true if there is a affected row
+		if (result > 0) {
+			return true;
 		}
 		// Return false if none of above conditions are met
 		return false;
