@@ -32,8 +32,9 @@
 	<div class="container">
 		<!-- Warning panel -->
 		<c:if test="${not empty inactiveAccountName}">
-			<div class="alert alert-warning">Hello Quang, your account is
-				currently inactive. Please contact support to activate your account!</div>
+			<div class="alert alert-warning">Hello ${inactiveAccountName},
+				your account is currently inactive. Please contact support to
+				activate your account!</div>
 			<form:form action="logout.htm">
 				<input type="submit" class="btn btn-default"
 					value="Click here to log out" />
