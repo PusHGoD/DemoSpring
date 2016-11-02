@@ -3,6 +3,14 @@ package com.spring.dao;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * @author HuanPM Interface of generic DAO (Data Access Object)
+ *
+ * @param <K>
+ *            key
+ * @param <E>
+ *            entity
+ */
 public interface GenericDAO<K extends Serializable, E> {
 
 	/**

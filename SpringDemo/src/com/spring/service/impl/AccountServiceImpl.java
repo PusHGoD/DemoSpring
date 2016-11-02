@@ -6,14 +6,18 @@ import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
 import com.spring.service.AccountService;
 
+/**
+ * @author HuanPM Implementation of account service
+ */
 @Service("accountSerivce")
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class AccountServiceImpl implements AccountService {
 
 	/**
@@ -29,11 +33,15 @@ public class AccountServiceImpl implements AccountService {
 	 * java.lang.String)
 	 */
 	public Account checkLogin(String username, String password) {
+		// Call to DAO and get result
 		Account result = dao.findByUserNameAndPassword(username, password);
+		// If result is null, return null
 		if (result != null) {
+			// If account is inactive, return empty result
 			if (!result.isActive()) {
 				return new Account();
 			}
+			// Return account info
 			return result;
 		}
 		return null;

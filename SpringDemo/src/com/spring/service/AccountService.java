@@ -3,12 +3,16 @@ package com.spring.service;
 import java.text.ParseException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.entity.Account;
 
+/**
+ * @author HuanPM Interface of account service
+ */
 @Service("accountSerivce")
-@Transactional
+@Transactional(propagation = Propagation.REQUIRES_NEW)
 public interface AccountService {
 
 	/**

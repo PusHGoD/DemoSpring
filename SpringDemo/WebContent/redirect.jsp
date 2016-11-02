@@ -8,12 +8,15 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<!-- Redirect to inactive page -->
 	<c:if test="${empty accountInfo and not empty inactiveAccountName }">
 		<c:redirect url="/inactive.htm" />
 	</c:if>
+	<!-- Redirect to home page -->
 	<c:if test="${not empty accountInfo and empty inactiveAccountName }">
 		<c:redirect url="/home.htm" />
 	</c:if>
+	<!-- Redirect to login page -->
 	<c:if test="${empty accountInfo and empty inactiveAccountName }">
 		<c:redirect url="/login.htm" />
 	</c:if>

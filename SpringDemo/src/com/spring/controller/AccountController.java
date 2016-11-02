@@ -29,6 +29,9 @@ public class AccountController {
 	 */
 	private static Logger logger = Logger.getLogger(AccountController.class.getName());
 
+	/**
+	 * Autowired account service
+	 */
 	@Autowired
 	private AccountService service;
 
@@ -38,6 +41,7 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/login", method = RequestMethod.GET)
 	public String getLoginPage(@ModelAttribute("user") Account account) {
+		// Redirect to login page
 		return "login";
 	}
 
@@ -66,11 +70,13 @@ public class AccountController {
 			} else {
 				// Put error message to login page
 				model.put("errorMessage", "Invalid username or password");
+				// Redirect to login page
 				return "login";
 			}
 		} catch (HibernateException e) {
+			// Put error message to login page
 			model.put("errorMessage", "Error occurred in processing request!");
-			// Log hibernate error message
+			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
 		return "login";
@@ -82,6 +88,7 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/home", method = RequestMethod.GET)
 	public String getHomePage(@ModelAttribute("user") Account account) {
+		// Redirect to home page
 		return "home";
 	}
 
@@ -113,12 +120,14 @@ public class AccountController {
 				return "home";
 			}
 		} catch (ParseException e) {
-			// Log parse error message
+			// Put error message to home page
 			model.put("errorMessage", "Error occurred in parsing date!");
+			// Log parse error message
 			logger.error("Inputted date cannot be parsed : " + strDOB);
 		} catch (HibernateException e) {
+			// Put error message to home page
 			model.put("errorMessage", "Error occurred in processing request!");
-			// Log hibernate error message
+			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
 		return "home";
@@ -141,6 +150,7 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/inactive")
 	public String getInactivePage() {
+		// Redirect to inactive page
 		return "inactive";
 	}
 }
