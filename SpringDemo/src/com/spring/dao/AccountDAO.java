@@ -12,7 +12,7 @@ public interface AccountDAO {
 	 * @param password
 	 * @return account information
 	 */
-	public Account checkLogin(String username, String password);
+	public Account findByUserNameAndPassword(String username, String password);
 
 	/**
 	 * @param account

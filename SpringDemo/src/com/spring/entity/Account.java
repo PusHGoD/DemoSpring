@@ -1,5 +1,5 @@
 package com.spring.entity;
-// Generated Nov 1, 2016 11:24:41 AM by Hibernate Tools 5.2.0.Beta1
+// Generated Nov 2, 2016 9:01:05 AM by Hibernate Tools 5.2.0.Beta1
 
 import java.util.Date;
 import javax.persistence.Column;
@@ -24,16 +24,19 @@ public class Account implements java.io.Serializable {
 	private String firstName;
 	private String lastName;
 	private Date dateOfBirth;
+	private boolean active;
 
 	public Account() {
 	}
 
-	public Account(String userName, String password, String firstName, String lastName, Date dateOfBirth) {
+	public Account(String userName, String password, String firstName, String lastName, Date dateOfBirth,
+			boolean active) {
 		this.userName = userName;
 		this.password = password;
 		this.firstName = firstName;
 		this.lastName = lastName;
 		this.dateOfBirth = dateOfBirth;
+		this.active = active;
 	}
 
 	@Id
@@ -92,6 +95,15 @@ public class Account implements java.io.Serializable {
 
 	public void setDateOfBirth(Date dateOfBirth) {
 		this.dateOfBirth = dateOfBirth;
+	}
+
+	@Column(name = "active", nullable = false)
+	public boolean isActive() {
+		return this.active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 }
