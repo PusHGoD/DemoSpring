@@ -46,6 +46,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Integer, Account> implements 
 			Account sensitiveInfo = this.findById(account.getId());
 			account.setPassword(sensitiveInfo.getPassword());
 			account.setActive(sensitiveInfo.isActive());
+			// Update account and return result
 			return this.update(account);
 		} else
 			return false;

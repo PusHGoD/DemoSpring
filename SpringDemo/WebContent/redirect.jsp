@@ -9,11 +9,11 @@
 </head>
 <body>
 	<!-- Redirect to home page -->
-	<c:if test="${not empty accountInfo and empty inactiveAccountName }">
+	<c:if test="${not empty accountInfo}">
 		<c:redirect url="/home.htm" />
 	</c:if>
 	<!-- Redirect to login page -->
-	<c:if test="${empty accountInfo and empty inactiveAccountName }">
+	<c:if test="${empty accountInfo}">
 		<c:redirect url="/login.htm" />
 	</c:if>
 </body>

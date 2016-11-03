@@ -1,6 +1,7 @@
 package com.spring.controller;
 
 import java.text.ParseException;
+import java.util.Map.Entry;
 
 import javax.servlet.http.HttpSession;
 
@@ -55,23 +56,34 @@ public class AccountController {
 	public String login(ModelMap model, @ModelAttribute("user") Account account, HttpSession session) {
 		try {
 			// Log in and get account information
-			Account result = service.checkLogin(account.getUserName(), account.getPassword());
-			// Check if user logged in successfully
-			if (result != null) {
-				if (result.getFirstName() == null && result.getLastName() == null && result.getDateOfBirth() == null) {
-					session.setAttribute("inactiveAccountName", account.getUserName());
-					return "redirect:/inactive.htm";
-				} else {
-					// Set session attribute to account information
-					session.setAttribute("accountInfo", result);
-					// Redirect to home page
-					return "redirect:/home.htm";
-				}
-			} else {
+			Entry<Integer, Account> result = service.checkLogin(account.getUserName(), account.getPassword());
+			switch (result.getKey()) {
+			case 0: {
 				// Put error message to login page
 				model.put("errorMessage", "Invalid username or password");
 				// Redirect to login page
 				return "login";
+			}
+			case 1: {
+				// Set session attribute to account information
+				session.setAttribute("accountInfo", result.getValue());
+				// Redirect to home page
+				return "redirect:/home.htm";
+			}
+			case 2: {
+				// Put inactive account message to login page
+				model.put("errorMessage",
+						"Your account is currently inactive. Please contact support for more information.");
+				// Redirect to login page
+				return "login";
+			}
+			default: {
+				// Put error message to login page
+				model.put("errorMessage", "Unknown error has occurred.");
+				// Log Hibernate error message
+				logger.error("Unknown return code has returned" + result.getKey());
+				break;
+			}
 			}
 		} catch (HibernateException e) {
 			// Put error message to login page
@@ -143,14 +155,5 @@ public class AccountController {
 		session.invalidate();
 		// Redirect to login page
 		return "redirect:/login.htm";
-	}
-
-	/**
-	 * @return redirection to inactive page
-	 */
-	@RequestMapping(value = "/inactive")
-	public String getInactivePage() {
-		// Redirect to inactive page
-		return "inactive";
 	}
 }

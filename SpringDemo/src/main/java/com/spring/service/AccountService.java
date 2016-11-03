@@ -1,10 +1,9 @@
 package com.spring.service;
 
 import java.text.ParseException;
+import java.util.Map.Entry;
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.entity.Account;
 
@@ -17,16 +16,17 @@ public interface AccountService {
 	/**
 	 * @param username
 	 * @param password
-	 * @return account information
+	 * @return key: return code and value: account information (if return code
+	 *         is 1)
 	 */
-	public Account checkLogin(String username, String password);
+	public Entry<Integer, Account> checkLogin(String username, String password);
 
 	/**
-	 * @param account
+	 * @param input
 	 * @param strDOB
 	 *            strDOB: a string following dd/mm/yyyy format
 	 * @return update result
 	 * @throws ParseException
 	 */
-	public boolean updateAccountInfo(Account account, String strDOB) throws ParseException;
+	public boolean updateAccountInfo(Account input, String strDOB) throws ParseException;
 }
