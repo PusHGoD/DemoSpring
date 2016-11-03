@@ -8,6 +8,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.dao.GenericDAO;
 
@@ -30,6 +32,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	/**
 	 * @return Class object of E
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private Class<E> getGenericType() {
 		// Resolve type of arguments (K,E)
 		Class<?>[] typeArgs = GenericTypeResolver.resolveTypeArguments(this.getClass(), GenericDAO.class);
@@ -42,6 +45,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * 
 	 * @see com.spring.dao.GenericDAO#find()
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public List<E> find() {
 		// Get current session
 		Session session = sessionFactory.getCurrentSession();
@@ -58,6 +62,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * 
 	 * @see com.spring.dao.GenericDAO#findById(java.io.Serializable)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public E findById(K k) {
 		// Get current session
 		Session session = sessionFactory.getCurrentSession();
@@ -71,6 +76,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * 
 	 * @see com.spring.dao.GenericDAO#add(java.lang.Object)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public K add(E e) {
 		// Get current session
 		Session session = sessionFactory.getCurrentSession();
@@ -84,6 +90,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * 
 	 * @see com.spring.dao.GenericDAO#update(java.lang.Object)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean update(E e) {
 		// If e is not null, continue updating e
 		if (e != null) {
@@ -101,6 +108,7 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * 
 	 * @see com.spring.dao.GenericDAO#delete(java.lang.Object)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean delete(E e) {
 		// If e is not null, continue removing e
 		if (e != null) {

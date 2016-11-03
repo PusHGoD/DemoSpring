@@ -12,7 +12,6 @@ import com.spring.entity.Account;
  * @author HuanPM Interface of account service
  */
 @Service("accountSerivce")
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public interface AccountService {
 
 	/**

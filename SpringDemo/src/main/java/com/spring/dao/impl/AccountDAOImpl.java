@@ -3,6 +3,8 @@ package com.spring.dao.impl;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
@@ -18,6 +20,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Integer, Account> implements 
 	 * @see com.spring.dao.AccountDAO#checkLogin(java.lang.String,
 	 * java.lang.String)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public Account findByUserNameAndPassword(String username, String password) {
 		// Get current session
 		Session session = sessionFactory.getCurrentSession();
@@ -36,12 +39,16 @@ public class AccountDAOImpl extends GenericDAOImpl<Integer, Account> implements 
 	 * 
 	 * @see com.spring.dao.AccountDAO#updateInfo(com.spring.model.Account)
 	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean updateInfo(Account account) {
-		// Inject sensitive info (password, active) to arg account
-		Account sensitiveInfo = this.findById(account.getId());
-		account.setPassword(sensitiveInfo.getPassword());
-		account.setActive(sensitiveInfo.isActive());
-		return this.update(account);
+		if (account != null) {
+			// Inject sensitive info (password, active) to arg account
+			Account sensitiveInfo = this.findById(account.getId());
+			account.setPassword(sensitiveInfo.getPassword());
+			account.setActive(sensitiveInfo.isActive());
+			return this.update(account);
+		} else
+			return false;
 	}
 
 }

@@ -24,8 +24,8 @@
 <title>Login Page</title>
 </head>
 <body>
-	<!-- If user has logged in, redirect to home page or inactive pages-->
-	<c:if test="${not empty accountInfo or not empty inactiveAccountName}">
+	<!-- If user has logged in, redirect to home page -->
+	<c:if test="${not empty accountInfo}">
 		<c:redirect url="redirect.jsp" />
 	</c:if>
 	<!-- Container div -->

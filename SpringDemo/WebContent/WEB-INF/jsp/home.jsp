@@ -32,7 +32,7 @@
 <title>Home Page</title>
 </head>
 <body>
-	<!-- If user has not logged in yet or is inactive, redirect to login or inactive page -->
+	<!-- If user has not logged in yet, redirect to login page -->
 	<c:if test="${empty accountInfo}">
 		<c:redirect url="redirect.jsp" />
 	</c:if>

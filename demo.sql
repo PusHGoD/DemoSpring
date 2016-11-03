@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `springdemo` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `springdemo`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: springdemo
@@ -40,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-24',''),(2,'quangnnd','lazziness','Quang','Nguyen','1996-01-01','\0'),(3,'baoht','123456','Bao','Huynh','1996-01-01','\0'),(4,'danhlt','123456','Danh','Le','1996-01-01','');
+INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-24',''),(2,'quangnnd','lazziness','Quang','Nguyen','1996-09-12',''),(3,'baoht','123456','Bao','Huynh','1996-01-01','\0'),(4,'danhlt','123456','Danh','Le','1996-01-01','');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-11-02 14:33:03
+-- Dump completed on 2016-11-03  8:47:19
