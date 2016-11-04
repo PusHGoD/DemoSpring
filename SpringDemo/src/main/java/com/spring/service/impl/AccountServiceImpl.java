@@ -89,6 +89,9 @@ public class AccountServiceImpl implements AccountService {
 	 * @throws ParseException
 	 */
 	public Date formatDate(String s) throws ParseException {
+		if (s == null || s.isEmpty()) {
+			return null;
+		}
 		return tl.get().parse(s);
 	}
 }
