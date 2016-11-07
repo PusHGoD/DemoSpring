@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+	<account id="1" user_name="quang" password="123" first_name="duy"
+		last_name="quang" date_of_birth="1996-09-12" active="true" />
+	<account id="2" user_name="huan" password="123" first_name="phan"
+		last_name="huan" date_of_birth="1996-09-12" active="false" />
+</dataset>

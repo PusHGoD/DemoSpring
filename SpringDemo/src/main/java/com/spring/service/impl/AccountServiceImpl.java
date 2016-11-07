@@ -8,8 +8,6 @@ import java.util.Map.Entry;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
@@ -19,7 +17,6 @@ import com.spring.service.AccountService;
  * @author HuanPM Implementation of account service
  */
 @Service("accountSerivce")
-@Transactional(propagation = Propagation.REQUIRES_NEW)
 public class AccountServiceImpl implements AccountService {
 
 	/**

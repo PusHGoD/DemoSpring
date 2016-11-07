@@ -123,7 +123,7 @@ public class AccountServiceTest {
 	public void testUpdateInfo_NullInputAndValidDate() {
 		when(testDAO.updateInfo(null)).thenReturn(false);
 		try {
-			Assert.assertEquals(false, service.updateAccountInfo(null, "24/11/996"));
+			Assert.assertEquals(false, service.updateAccountInfo(null, "24/11/1996"));
 		} catch (ParseException e) {
 			fail("Parse exception is thrown unexpectedly!");
 		}
