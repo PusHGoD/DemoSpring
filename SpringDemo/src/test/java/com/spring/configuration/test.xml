@@ -19,7 +19,7 @@
 		destroy-method="close">
 		<property name="driverClassName" value="org.h2.Driver" />
 		<property name="url"
-			value="jdbc:h2:mem:springdemo;INIT= CREATE SCHEMA IF NOT EXISTS springdemo" />
+			value="jdbc:h2:mem:springdemo;DB_CLOSE_DELAY=-1;INIT= CREATE SCHEMA IF NOT EXISTS springdemo" />
 		<property name="username" value="sa" />
 		<property name="password" value="" />
 	</bean>

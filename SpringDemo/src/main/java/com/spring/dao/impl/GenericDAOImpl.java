@@ -32,7 +32,6 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	/**
 	 * @return Class object of E
 	 */
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	private Class<E> getGenericType() {
 		// Resolve type of arguments (K,E)
 		Class<?>[] typeArgs = GenericTypeResolver.resolveTypeArguments(this.getClass(), GenericDAO.class);

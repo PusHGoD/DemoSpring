@@ -41,7 +41,7 @@ public class AccountDAOImpl extends GenericDAOImpl<Integer, Account> implements 
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean updateInfo(Account account) {
-		if (account != null && account.getDateOfBirth() != null) {
+		if (account != null) {
 			// Inject sensitive info (password, active) to arg account
 			Account sensitiveInfo = this.findById(account.getId());
 			account.setPassword(sensitiveInfo.getPassword());

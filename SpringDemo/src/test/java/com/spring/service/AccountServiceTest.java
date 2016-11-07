@@ -14,6 +14,7 @@ import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.dao.DataIntegrityViolationException;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
@@ -22,7 +23,7 @@ import com.spring.service.impl.AccountServiceImpl;
 public class AccountServiceTest {
 
 	/**
-	 * A auto-injected account DAO
+	 * A auto-injected Account DAO
 	 */
 	@Mock
 	AccountDAO testDAO;
@@ -85,32 +86,55 @@ public class AccountServiceTest {
 	}
 
 	@Test
+	public void testFindByUserNameAndPassword_UsernameTooLong() {
+		when(testDAO.findByUserNameAndPassword("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa", "123")).thenReturn(null);
+		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(0, null);
+		Assert.assertEquals(expected, service.checkLogin("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa", "123"));
+	}
+
+	@Test
+	public void testFindByUserNameAndPassword_PasswordTooLong() {
+		when(testDAO.findByUserNameAndPassword("quang", "123456789123456789123456789123456789")).thenReturn(null);
+		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(0, null);
+		Assert.assertEquals(expected, service.checkLogin("quang", "123456789123456789123456789123456789"));
+	}
+
+	@Test
+	public void testFindByUserNameAndPassword_UsernameAndPasswordTooLong() {
+		when(testDAO.findByUserNameAndPassword("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa",
+				"123456789123456789123456789123456789")).thenReturn(null);
+		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(0, null);
+		Assert.assertEquals(expected, service.checkLogin("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa",
+				"123456789123456789123456789123456789"));
+	}
+
+	@Test
 	public void testCheckLogin_InactiveAccount() {
-		Account expectedAcc = new Account();
-		expectedAcc.setId(3);
-		expectedAcc.setUserName("baoht");
-		expectedAcc.setPassword("23456");
-		expectedAcc.setActive(false);
-		when(testDAO.findByUserNameAndPassword("baoht", "23456")).thenReturn(expectedAcc);
+		Account expectedinput = new Account();
+		expectedinput.setId(3);
+		expectedinput.setUserName("baoht");
+		expectedinput.setPassword("23456");
+		expectedinput.setActive(false);
+		when(testDAO.findByUserNameAndPassword("baoht", "23456")).thenReturn(expectedinput);
 		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(2, null);
 		Assert.assertEquals(expected, service.checkLogin("baoht", "23456"));
 	}
 
 	@Test
 	public void testCheckLogin_ActiveAccount() {
-		Account expectedAcc = new Account();
-		expectedAcc.setId(1);
-		expectedAcc.setUserName("minhhuan");
-		expectedAcc.setPassword("@huanvip@");
-		expectedAcc.setActive(true);
-		when(testDAO.findByUserNameAndPassword("minhhuan", "@huanvip@")).thenReturn(expectedAcc);
-		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(1, expectedAcc);
+		Account expectedinput = new Account();
+		expectedinput.setId(1);
+		expectedinput.setUserName("minhhuan");
+		expectedinput.setPassword("@huanvip@");
+		expectedinput.setActive(true);
+		when(testDAO.findByUserNameAndPassword("minhhuan", "@huanvip@")).thenReturn(expectedinput);
+		Entry<Integer, Account> expected = new AbstractMap.SimpleEntry<Integer, Account>(1, expectedinput);
 		Assert.assertEquals(expected, service.checkLogin("minhhuan", "@huanvip@"));
 	}
 
 	/* updateInfo() */
 	@Test
-	public void testUpdateInfo_NullInputAndNullDate() {
+	public void testUpdateInfo_NullAccount() {
 		when(testDAO.updateInfo(null)).thenReturn(false);
 		try {
 			Assert.assertEquals(false, service.updateAccountInfo(null, null));
@@ -120,10 +144,59 @@ public class AccountServiceTest {
 	}
 
 	@Test
-	public void testUpdateInfo_NullInputAndValidDate() {
-		when(testDAO.updateInfo(null)).thenReturn(false);
+	public void testUpdateInfo_NullInputAndNullDate() {
+		Account input = new Account("quang", "123", null, null, null, true);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
 		try {
-			Assert.assertEquals(false, service.updateAccountInfo(null, "24/11/1996"));
+			Assert.assertEquals(false, service.updateAccountInfo(input, null));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_NullFirstName() {
+		Account input = new Account("quang", "123", null, "Quang1", null, true);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_NullLastName() {
+		Account input = new Account("quang", "123", "Duy1", null, null, true);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+
+	}
+
+	@Test
+	public void testUpdateInfo_NullDate() {
+		Account input = new Account();
+		input.setId(1);
+		input.setUserName("minhhuan");
+		input.setFirstName("Bao");
+		input.setLastName("Huynh");
+		input.setActive(true);
+		when(testDAO.updateInfo(input)).thenReturn(false);
+		try {
+			assertEquals(false, service.updateAccountInfo(input, null));
 		} catch (ParseException e) {
 			fail("Parse exception is thrown unexpectedly!");
 		}
@@ -137,6 +210,243 @@ public class AccountServiceTest {
 		} catch (ParseException e) {
 			fail("Parse exception is thrown unexpectedly!");
 		}
+	}
+
+	@Test
+	public void testUpdateInfo_NullFirstNameAndNullLastName() {
+		when(testDAO.updateInfo(null)).thenReturn(false);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(null, "24/11/1996"));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongFirstName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongLastName() {
+		Account input = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongFirstNameAndNullLastName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongLastNameAndNullFirstName() {
+		Account input = new Account("quang", "123", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongLastNameAndLongFirstName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongFirstNameAndNullDate() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, null));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongLastNameAndNullDate() {
+		Account input = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, null));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_LongFirstNameAndLongLastName_NullDate() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+				"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(false, service.updateAccountInfo(input, null));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryFirstName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, "12/12/1996"));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryLastName() {
+		Account input = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, "12/12/1996"));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryFirstNameAndNullLastName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryLastNameAndNullFirstName() {
+		Account input = new Account("quang", "123", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenThrow(DataIntegrityViolationException.class);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, "12/12/1996"));
+			fail("No exception is thrown");
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		} catch (DataIntegrityViolationException e) {
+
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryLastNameAndBoundaryFirstName() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+				null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, "12/12/1996"));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryFirstNameAndNullDate() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, null));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryLastNameAndNullDate() {
+		Account input = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, null));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+	}
+
+	@Test
+	public void testUpdateInfo_BoundaryFirstNameAndBoundaryLastName_NullDate() {
+		Account input = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+				null, true);
+		input.setId(1);
+		when(testDAO.updateInfo(input)).thenReturn(true);
+		try {
+			Assert.assertEquals(true, service.updateAccountInfo(input, null));
+		} catch (ParseException e) {
+			fail("Parse exception is thrown unexpectedly!");
+		}
+
 	}
 
 	@Test
@@ -169,22 +479,6 @@ public class AccountServiceTest {
 			assertEquals(false, service.updateAccountInfo(input, "24//996"));
 			fail("Invalid date in unhandled!");
 		} catch (ParseException e) {
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_ValidInputAndNullDate() {
-		Account input = new Account();
-		input.setId(1);
-		input.setUserName("minhhuan");
-		input.setFirstName("Bao");
-		input.setLastName("Huynh");
-		input.setActive(true);
-		when(testDAO.updateInfo(input)).thenReturn(false);
-		try {
-			assertEquals(false, service.updateAccountInfo(input, null));
-		} catch (ParseException e) {
-			fail("Parse exception is thrown unexpectedly!");
 		}
 	}
 
