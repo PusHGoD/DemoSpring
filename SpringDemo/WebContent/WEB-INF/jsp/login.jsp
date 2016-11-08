@@ -26,7 +26,7 @@
 <body>
 	<!-- If user has logged in, redirect to home page -->
 	<c:if test="${not empty accountInfo}">
-		<c:redirect url="/home.htm" />
+		<c:redirect url="redirect.jsp" />
 	</c:if>
 	<!-- Container div -->
 	<div class="container">

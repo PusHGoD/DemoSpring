@@ -34,7 +34,7 @@
 <body>
 	<!-- If user has not logged in yet, redirect to login page -->
 	<c:if test="${empty accountInfo}">
-		<c:redirect url="/login.htm" />
+		<c:redirect url="redirect.jsp" />
 	</c:if>
 	<!-- Format date to dd/mm/yyyy -->
 	<fmt:formatDate var="formatedDate" value="${accountInfo.dateOfBirth}"

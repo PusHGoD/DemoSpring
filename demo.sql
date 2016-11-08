@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `springdemo` /*!40100 DEFAULT CHARACTER SET utf8 */;
+USE `springdemo`;
 -- MySQL dump 10.13  Distrib 5.7.12, for Win64 (x86_64)
 --
 -- Host: localhost    Database: springdemo
@@ -29,6 +31,7 @@ CREATE TABLE `account` (
   `first_name` varchar(30) NOT NULL,
   `last_name` varchar(30) NOT NULL,
   `date_of_birth` date NOT NULL,
+  `active` bit(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -39,7 +42,7 @@ CREATE TABLE `account` (
 
 LOCK TABLES `account` WRITE;
 /*!40000 ALTER TABLE `account` DISABLE KEYS */;
-INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-27'),(2,'quangnnd','lazziness','Quang','Nguyen','1996-01-01'),(3,'baoht','baoluoivkl','Bao','Huynh','1996-01-01'),(4,'danhlt','123456','Danh','Le','1996-01-01');
+INSERT INTO `account` VALUES (1,'minhhuan','@huanvip@','Huan','Phan','1996-11-24',''),(2,'quangnnd','lazziness','Quang','Nguyen','1996-09-12',''),(3,'baoht','123456','Bao','Huynh','1996-01-01','\0'),(4,'danhlt','123456','Danh','Le','1996-01-01','');
 /*!40000 ALTER TABLE `account` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -52,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-10-28 11:37:48
+-- Dump completed on 2016-11-03  8:47:19
