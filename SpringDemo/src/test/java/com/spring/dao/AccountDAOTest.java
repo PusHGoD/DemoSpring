@@ -24,18 +24,33 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.spring.entity.Account;
 
+/**
+ * @author HuanPM The Unit Test for AccountDAO
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/com/spring/configuration/test.xml" })
 public class AccountDAOTest {
 
+	/**
+	 * Autowired Account DAO
+	 */
 	@Autowired
 	AccountDAO dao;
 
+	/**
+	 * Autowired data source
+	 */
 	@Autowired
 	DataSource dataSource;
 
+	/**
+	 * A DBUNit Database Tester
+	 */
 	IDatabaseTester dbTester;
 
+	/**
+	 * Simple date format
+	 */
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 
 	@Before
@@ -101,6 +116,17 @@ public class AccountDAOTest {
 	public void testFindByUserNameAndPassword_UsernameAndPasswordTooLong() {
 		Assert.assertNull(dao.findByUserNameAndPassword("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa",
 				"123456789123456789123456789123456789"));
+	}
+
+	@Test
+	public void testFindByUserNameAndPassword_CorrectUsernameAndPassword() {
+		Account result = dao.findByUserNameAndPassword("quang", "123");
+		Assert.assertNotNull(result);
+		Assert.assertEquals(new Integer(1), result.getId());
+		Assert.assertEquals("quang", result.getUserName());
+		Assert.assertEquals("123", result.getPassword());
+		Assert.assertEquals("duy", result.getFirstName());
+		Assert.assertEquals("quang", result.getLastName());
 	}
 
 	/* updateInfo */
@@ -361,7 +387,7 @@ public class AccountDAOTest {
 			acc.setId(1);
 			Assert.assertEquals(false, dao.updateInfo(acc));
 		} catch (ParseException e) {
-			
+
 			fail("Parse exception is thrown unexpectedly!");
 		} catch (DataIntegrityViolationException e) {
 
@@ -377,7 +403,7 @@ public class AccountDAOTest {
 			acc.setId(1);
 			Assert.assertEquals(false, dao.updateInfo(acc));
 		} catch (ParseException e) {
-			
+
 			fail("Parse exception is thrown unexpectedly!");
 		} catch (DataIntegrityViolationException e) {
 

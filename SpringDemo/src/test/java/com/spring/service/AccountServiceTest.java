@@ -20,6 +20,10 @@ import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
 import com.spring.service.impl.AccountServiceImpl;
 
+/**
+ * @author HuanPM
+ * The Unit Test for AccountService
+ */
 public class AccountServiceTest {
 
 	/**
