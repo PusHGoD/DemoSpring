@@ -8,6 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -69,6 +70,7 @@
 					<div class="form-group">First name: ${accountInfo.firstName}</div>
 					<div class="form-group">Last name: ${accountInfo.lastName}</div>
 					<div class="form-group">Date of birth: ${formatedDate}</div>
+					<div class="form-group">Email: ${accountInfo.email}</div>
 					<!-- The modal show button -->
 					<input type="button" data-toggle="modal" data-target="#myModal"
 						class="btn btn-control btn-lg" value="Edit" />
@@ -112,7 +114,7 @@
 						<div class="form-group">
 							Date of birth:
 							<!-- Date picker -->
-							<input type="text" name="dateOfBirth" data-provide="datepicker"
+							<form:input path="dateOfBirth" type="text" data-provide="datepicker"
 								class="form-control" data-date-format="dd/mm/yyyy"
 								value="${formatedDate}" placeholder="dd/mm/yyyy" id="dob" />
 							<div id="dob_error" class="text-danger"></div>
@@ -121,8 +123,7 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary"
-							onclick="submit_form();">Save</button>
+						<button type="button" class="btn btn-primary" id="user_update_btn">Save</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->

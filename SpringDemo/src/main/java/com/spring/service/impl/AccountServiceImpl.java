@@ -57,38 +57,11 @@ public class AccountServiceImpl implements AccountService {
 	 * com.spring.service.AccountService#updateAccountInfo(com.spring.entity.
 	 * Account, java.lang.String)
 	 */
-	public boolean updateAccountInfo(Account input, String strDOB) throws ParseException {
+	public boolean updateAccountInfo(Account input) {
 		if (input != null) {
-			// Convert string date of birth to Date object
-			Date dob = formatDate(strDOB);
-			// Set date into account info
-			input.setDateOfBirth(dob);
 			// Update and return result
 			return dao.updateInfo(input);
 		}
 		return false;
-	}
-
-	/**
-	 * A thread-safe method to store SimpleDateFormat
-	 */
-	private static final ThreadLocal<SimpleDateFormat> tl = new ThreadLocal<SimpleDateFormat>() {
-		@Override
-		protected SimpleDateFormat initialValue() {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			return sdf;
-		}
-	};
-
-	/**
-	 * @param s
-	 * @return formatted date
-	 * @throws ParseException
-	 */
-	public Date formatDate(String s) throws ParseException {
-		if (s == null || s.isEmpty()) {
-			return null;
-		}
-		return tl.get().parse(s);
 	}
 }

@@ -28,5 +28,5 @@ public interface AccountService {
 	 * @return update result
 	 * @throws ParseException
 	 */
-	public boolean updateAccountInfo(Account input, String strDOB) throws ParseException;
+	public boolean updateAccountInfo(Account input);
 }
