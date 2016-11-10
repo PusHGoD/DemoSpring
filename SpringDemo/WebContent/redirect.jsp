@@ -8,8 +8,12 @@
 <title>Insert title here</title>
 </head>
 <body>
+	<!-- Redirect to manager page -->
+	<c:if test="${not empty accountInfo and accountInfo.role.id == 1}">
+		<c:redirect url="/manager.htm" />
+	</c:if>
 	<!-- Redirect to home page -->
-	<c:if test="${not empty accountInfo}">
+	<c:if test="${not empty accountInfo and accountInfo.role.id == 2}">
 		<c:redirect url="/home.htm" />
 	</c:if>
 	<!-- Redirect to login page -->

@@ -34,7 +34,7 @@
 </head>
 <body>
 	<!-- If user has not logged in yet, redirect to login page -->
-	<c:if test="${empty accountInfo}">
+	<c:if test="${empty accountInfo or accountInfo.role.id != 2}">
 		<c:redirect url="redirect.jsp" />
 	</c:if>
 	<!-- Format date to dd/mm/yyyy -->
@@ -57,6 +57,7 @@
 			</div>
 			<!-- Panel body -->
 			<div class="panel-body">
+				<div id="ajaxMessage"></div>
 				<!-- Success message -->
 				<c:if test="${not empty successMessage}">
 					<div class="alert alert-success">${successMessage}</div>
@@ -94,36 +95,38 @@
 					<div class="modal-body">
 						<form:hidden path="id" value="${accountInfo.id}" />
 						<form:hidden path="userName" value="${accountInfo.userName}" />
+
 						<!-- First name -->
 						<div class="form-group">
 							First name:
 							<form:input path="firstName" type="text" class="form-control"
-								value="${accountInfo.firstName}" placeholder="First name"
-								id="firstname" />
+								value="${accountInfo.firstName}" placeholder="First name" />
 							<div id="firstname_error" class="text-danger"></div>
 						</div>
 						<!-- Last name -->
 						<div class="form-group">
 							Last name:
 							<form:input path="lastName" type="text" class="form-control"
-								value="${accountInfo.lastName}" placeholder="Last name"
-								id="lastname" />
+								value="${accountInfo.lastName}" placeholder="Last name" />
 							<div id="lastname_error" class="text-danger"></div>
 						</div>
 						<!-- Date of birth -->
 						<div class="form-group">
 							Date of birth:
 							<!-- Date picker -->
-							<form:input path="dateOfBirth" type="text" data-provide="datepicker"
-								class="form-control" data-date-format="dd/mm/yyyy"
-								value="${formatedDate}" placeholder="dd/mm/yyyy" id="dob" />
+							<form:input path="dateOfBirth" type="text"
+								data-provide="datepicker" class="form-control"
+								data-date-format="dd/mm/yyyy" value="${formatedDate}"
+								placeholder="dd/mm/yyyy" />
 							<div id="dob_error" class="text-danger"></div>
 						</div>
 					</div>
+					<form:hidden path="email" value="${accountInfo.email}" />
+					<form:hidden path="active" value="${accountInfo.active}" />
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" id="user_update_btn">Save</button>
+						<input type="submit" class="btn btn-primary" id="user-update-btn" />
 					</div>
 				</div>
 				<!-- /.modal-content -->

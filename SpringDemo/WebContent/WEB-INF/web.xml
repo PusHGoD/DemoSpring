@@ -11,6 +11,6 @@
     <url-pattern>*.htm</url-pattern>
   </servlet-mapping>
   <welcome-file-list>
-    <welcome-file>manager.jsp</welcome-file>
+    <welcome-file>redirect.jsp</welcome-file>
   </welcome-file-list>
 </web-app>

@@ -55,7 +55,7 @@
 			</div>
 			<!-- Login button -->
 			<input type="submit" value="Login"
-				class="btn btn-primary btn-lg btn-block" id="login_btn" />
+				class="btn btn-primary btn-lg btn-block" id="login-btn" />
 		</form:form>
 	</div>
 </body>

@@ -1,5 +1,7 @@
 package com.spring.dao;
 
+import java.util.List;
+
 import com.spring.entity.Account;
 
 /**
@@ -19,4 +21,28 @@ public interface AccountDAO {
 	 * @return update result (true/false)
 	 */
 	public boolean updateInfo(Account account);
+
+	/**
+	 * @return
+	 */
+	public List<Account> findAll();
+
+	/**
+	 * @param account
+	 */
+	public boolean addAccount(Account account);
+
+	/**
+	 * @param account
+	 * @param password
+	 * @return
+	 */
+	public boolean updatePassword(Account account, String password);
+
+	/**
+	 * @param from
+	 * @param to
+	 * @param password
+	 */
+	public void sendResetMail(String from, String to, String password);
 }

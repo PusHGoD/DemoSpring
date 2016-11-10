@@ -1,9 +1,9 @@
 $(document).ready(function() {
-	$("#login_btn").click(function() {
+	$("#login-btn").click(function() {
 		return checkLoginInput();
 	});
 
-	$("#user_update_btn").click(function() {
+	$("#user-update-btn").click(function() {
 		if (checkUpdateInput()) {
 			$("#editForm").submit();
 		}
@@ -11,7 +11,7 @@ $(document).ready(function() {
 
 	$('input.edit-btn').click(function() {
 		if ($(this).val() == "Edit") {
-			var dad = $(this).parent().parent();
+			var dad = $(this).parent().parent().parent();
 			dad.find('span.user-name').hide();
 			dad.find('span.password').hide();
 			dad.find('span.first-name').hide();
@@ -26,9 +26,14 @@ $(document).ready(function() {
 			dad.find('input.dob-datepicker').show();
 			dad.find('input.email-textbox').show();
 			dad.find('select.active-combobox').show();
-			dad.find('input.edit-btn').val("Save");
-		} else if ($(this).val() == "Save") {
-			var dad = $(this).parent().parent();
+			dad.find('div.action-btns').hide();
+			dad.find('div.edit-btns').show();
+		}
+	});
+
+	$('input.cancel-btn').click(function() {
+		if ($(this).val() == "Cancel") {
+			var dad = $(this).parent().parent().parent();
 			dad.find('input.user-name-textbox').hide();
 			dad.find('input.password-textbox').hide();
 			dad.find('input.first-name-textbox').hide();
@@ -44,7 +49,13 @@ $(document).ready(function() {
 			dad.find('span.email').show();
 			dad.find('span.active').show();
 			dad.find('input.edit-btn').val("Edit");
+			dad.find('div.action-btns').show();
+			dad.find('div.edit-btns').hide();
 		}
+	});
+
+	$("#manager-add-btn").click(function() {
+		$("#addForm").submit();
 	});
 
 	// $('input.user-name-textbox').focusout(function() {
@@ -58,7 +69,17 @@ $(document).ready(function() {
 	// dad.find('span.user-name').show();
 	// dad.find('input.edit-btn').val("Edit");
 	// });
+
 });
+
+// function load() {
+// $.ajax({
+// url : 'manager.htm',
+// type : 'POST',
+// success : function() {
+// }
+// });
+// }
 
 function parseDate(input, format) {
 	if (input.match("\\d{1,2}[/]\\d{1,2}[/]\\d{1,4}")) {
@@ -75,8 +96,8 @@ function parseDate(input, format) {
 }
 
 function checkLoginInput() {
-	var username = document.getElementById("username").value;
-	var password = document.getElementById("password").value;
+	var username = $("#username").val();
+	var password = $("#password").val();
 	var result = true;
 	if (username == null || username == "") {
 		$("#username_error").html("Please enter username.");
@@ -100,9 +121,9 @@ function checkLoginInput() {
 }
 
 function checkUpdateInput() {
-	var firstname = document.getElementById("firstname").value;
-	var lastname = document.getElementById("lastname").value;
-	var dob = document.getElementById("dob").value;
+	var firstname = $("#firstName").val();
+	var lastname = $("#lastName").val();
+	var dob = $("#dateOfBirth").val();
 	var result = true;
 	if (firstname == null || firstname == "") {
 		$("#firstname_error").html("Please enter first name.");

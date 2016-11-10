@@ -1,16 +1,20 @@
 package com.spring.service.impl;
 
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.AbstractMap;
-import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
+import com.spring.entity.Role;
 import com.spring.service.AccountService;
 
 /**
@@ -34,7 +38,7 @@ public class AccountServiceImpl implements AccountService {
 	public Entry<Integer, Account> checkLogin(String username, String password) {
 		Entry<Integer, Account> result = null;
 		// Call to DAO and get account information
-		Account accountInfo = dao.findByUserNameAndPassword(username, password);
+		Account accountInfo = dao.findByUserNameAndPassword(username, encryptMD5(password));
 		// If result is null, return null
 		if (accountInfo != null) {
 			// If account is inactive, return empty result
@@ -61,6 +65,73 @@ public class AccountServiceImpl implements AccountService {
 		if (input != null) {
 			// Update and return result
 			return dao.updateInfo(input);
+		}
+		return false;
+	}
+
+	public List<Account> getAccountList() {
+		return dao.findAll();
+	}
+
+	/**
+	 * @param size
+	 * @return
+	 */
+	public String randomPassword(int size) {
+		Random random = new Random();
+		String pass = "";
+		String randomValue = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+		for (int i = 0; i < size; i++) {
+			int randomNum = random.nextInt(randomValue.length());
+			pass += randomValue.charAt(randomNum);
+		}
+		return pass;
+	}
+
+	public String encryptMD5(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+			return hashtext;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#addNewAccount(com.spring.entity.
+	 * Account, java.lang.String)
+	 */
+	public boolean addNewAccount(Account input, int passSize) {
+		if (input != null) {
+			input.setPassword(encryptMD5(randomPassword(passSize)));
+			Role role = new Role();
+			role.setId(1);
+			input.setRole(role);
+			return dao.addAccount(input);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#resetPassword(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	public boolean resetPassword(Account input, String from, String to) {
+
+		if (input != null && from != null && to != null) {
+			String password = randomPassword(9);
+			dao.sendResetMail(from, to, password);
+			return dao.updatePassword(input, encryptMD5(password));
 		}
 		return false;
 	}
