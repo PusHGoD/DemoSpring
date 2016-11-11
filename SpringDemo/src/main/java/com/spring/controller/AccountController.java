@@ -18,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -217,9 +218,12 @@ public class AccountController {
 		return "redirect:/manager.htm";
 	}
 
+
+	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public String resetPassword(ModelMap model, @ModelAttribute("account") Account account) {
+	public @ResponseBody String resetPassword(ModelMap model, @RequestBody Account account) {
 		try {
+			logger.info(account.getId());
 			// Update account and get result
 			boolean result = service.resetPassword(account, "minhhuan@test.com", account.getEmail());
 			// Check if update operation is successful
@@ -227,12 +231,12 @@ public class AccountController {
 				// Put success message to home page
 				model.put("successMessage", "Password resetted!");
 				// Redirect to home page
-				return "redirect:/manager.htm";
+				return "Password resetted!";
 			} else {
 				// Put error message to home page
 				model.put("errorMessage", "Error in updating password! No update processed");
 				// Redirect to home page
-				return "redirect:/manager.htm";
+				return "Error in updating password! No update processed";
 			}
 		} catch (HibernateException e) {
 			// Put error message to home page
@@ -240,10 +244,39 @@ public class AccountController {
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
-		return "redirect:/manager.htm";
+		return "";
 	}
 
-	// @RequestMapping(value = "/manager", method = RequestMethod.POST)
+	// @RequestMapping(value = "/reset", method = RequestMethod.POST)
+	// public String resetPassword(ModelMap model, @ModelAttribute("account")
+	// Account account) {
+	// try {
+	// // Update account and get result
+	// boolean result = service.resetPassword(account, "minhhuan@test.com",
+	// account.getEmail());
+	// // Check if update operation is successful
+	// if (result) {
+	// // Put success message to home page
+	// model.put("successMessage", "Password resetted!");
+	// // Redirect to home page
+	// return "redirect:/manager.htm";
+	// } else {
+	// // Put error message to home page
+	// model.put("errorMessage", "Error in updating password! No update
+	// processed");
+	// // Redirect to home page
+	// return "redirect:/manager.htm";
+	// }
+	// } catch (HibernateException e) {
+	// // Put error message to home page
+	// model.put("errorMessage", "Error occurred in processing request!");
+	// // Log Hibernate error message
+	// logger.error("Error in processing request in DB :" + e.getMessage());
+	// }
+	// return "redirect:/manager.htm";
+	// }
+
+	// @RequestMapping(value = "/list")
 	// public @ResponseBody String getAccountList(ModelMap model) {
 	// List<Account> list = new ArrayList<Account>();
 	// list = service.getAccountList();

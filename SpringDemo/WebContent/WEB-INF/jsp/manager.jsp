@@ -83,8 +83,9 @@
 								<!-- Format date to dd/mm/yyyy -->
 								<fmt:formatDate var="formatedDate"
 									value="${account.dateOfBirth}" pattern="dd/MM/yyyy" />
-								<form:form modelAttribute="account" action="edit.htm">
-									<tr>
+								<tr>
+									<form:form modelAttribute="account" action="edit.htm"
+										class="management-form" method="POST">
 										<td><form:hidden path="id" value="${account.id}" />${account.id}</td>
 										<td><span class="user-name">${account.userName}</span> <form:input
 												path="userName" class="form-control user-name-textbox"
@@ -106,9 +107,9 @@
 												data-date-format="dd/mm/yyyy" value="${formatedDate}"
 												placeholder="dd/mm/yyyy" id="dob" style="display: none" /></td>
 										<td><span class="email">${account.email}</span> <form:input
-											path="email" type="text" class="form-control email-textbox"
-											value="${account.email}" placeholder="Email" id="email"
-											style="display: none" /></td>
+												path="email" type="text" class="form-control email-textbox"
+												value="${account.email}" placeholder="Email" id="email"
+												style="display: none" /></td>
 										<td><c:if test="${account.active}">
 												<span class="active"><strong class="text-success">Active</strong></span>
 											</c:if> <c:if test="${!account.active}">
@@ -128,40 +129,36 @@
 												<input type="submit" class="btn btn-primary save-btn"
 													value="Save" /> <input type="button"
 													class="btn btn-link cancel-btn" value="Cancel" />
-											</div></td>
-									</tr>
-								</form:form>
-								<form:form modelAttribute="account" action="reset.htm">
-									<form:hidden path="id" value="${account.id}" />
-									<form:hidden path="email" value="${account.email}" />
-									<!-- Reset modal form -->
-									<div class="modal fade" id="resetModal${account.id}"
-										tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-										aria-hidden="true">
-										<div class="modal-dialog">
-											<div class="modal-content">
-												<!-- Modal header -->
-												<div class="modal-header">
-													<button type="button" class="close" data-dismiss="modal"
-														aria-hidden="true">×</button>
-													<h4 class="modal-title">Reset password</h4>
-												</div>
-												<!-- Modal body -->
-												<div class="modal-body">Do you want to reset password
-													for this account?</div>
-												<!-- Modal footer -->
-												<div class="modal-footer">
-													<input type="submit" class="btn btn-primary" value="Yes" />
-													<button type="button" class="btn btn-danger"
-														data-dismiss="modal">No</button>
-												</div>
 											</div>
-											<!-- /.modal-content -->
-										</div>
-										<!-- /.modal-dialog -->
-									</div>
-									<!-- /.modal -->
-								</form:form>
+											<div class="modal fade" id="resetModal${account.id}"
+												tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+												aria-hidden="true">
+												<div class="modal-dialog">
+													<div class="modal-content">
+														<!-- Modal header -->
+														<div class="modal-header">
+															<button type="button" class="close" data-dismiss="modal"
+																aria-hidden="true">×</button>
+															<h4 class="modal-title">Reset password</h4>
+														</div>
+														<!-- Modal body -->
+														<div class="modal-body">Do you want to reset
+															password for this account?</div>
+														<!-- Modal footer -->
+														<div class="modal-footer">
+															<input type="button" class="btn btn-primary reset-btn"
+																value="Yes" formaction="reset.htm" />
+															<button type="button" class="btn btn-danger"
+																data-dismiss="modal">No</button>
+														</div>
+													</div>
+													<!-- /.modal-content -->
+												</div>
+												<!-- /.modal-dialog -->
+											</div> <!-- /.modal --></td>
+									</form:form>
+								</tr>
+
 							</c:forEach>
 						</tbody>
 					</table>

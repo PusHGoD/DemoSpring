@@ -25,6 +25,11 @@
 		</property>
 	</bean>
 
+	<bean id="jsonConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+
 	<!-- Account DAO implementation definition -->
 	<bean id="accountdao" class="com.spring.dao.impl.AccountDAOImpl">
 	</bean>
