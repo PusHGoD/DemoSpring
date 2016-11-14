@@ -218,33 +218,24 @@ public class AccountController {
 		return "redirect:/manager.htm";
 	}
 
-
-	
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
-	public @ResponseBody String resetPassword(ModelMap model, @RequestBody Account account) {
+	public @ResponseBody String resetPassword(@RequestBody Account account) {
 		try {
-			logger.info(account.getId());
 			// Update account and get result
 			boolean result = service.resetPassword(account, "minhhuan@test.com", account.getEmail());
 			// Check if update operation is successful
 			if (result) {
-				// Put success message to home page
-				model.put("successMessage", "Password resetted!");
 				// Redirect to home page
-				return "Password resetted!";
+				return "You have resetted password of " + account.getUserName() + "!";
 			} else {
-				// Put error message to home page
-				model.put("errorMessage", "Error in updating password! No update processed");
 				// Redirect to home page
-				return "Error in updating password! No update processed";
+				return "Error in resetting password!";
 			}
 		} catch (HibernateException e) {
-			// Put error message to home page
-			model.put("errorMessage", "Error occurred in processing request!");
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
-		return "";
+		return "Error occurred in DB processing";
 	}
 
 	// @RequestMapping(value = "/reset", method = RequestMethod.POST)

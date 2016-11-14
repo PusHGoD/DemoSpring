@@ -1,111 +1,115 @@
-$(document).ready(
-		function() {
-			$("#login-btn").click(function() {
-				return checkLoginInput();
-			});
+$(document).ready(function() {
+	$("#login-btn").click(function() {
+		return checkLoginInput();
+	});
 
-			$("#user-update-btn").click(function() {
-				if (checkUpdateInput()) {
-					$("#editForm").submit();
+	$("#user-update-btn").click(function() {
+		if (checkUpdateInput()) {
+			$("#editForm").submit();
+		}
+	});
+
+	$('input.edit-btn').click(function() {
+		if ($(this).val() == "Edit") {
+			var dad = $(this).parent().parent().parent();
+			dad.find('span.user-name').hide();
+			dad.find('span.password').hide();
+			dad.find('span.first-name').hide();
+			dad.find('span.last-name').hide();
+			dad.find('span.date-of-birth').hide();
+			dad.find('span.email').hide();
+			dad.find('span.active').hide();
+			dad.find('input.user-name-textbox').show();
+			dad.find('input.password-textbox').show();
+			dad.find('input.first-name-textbox').show();
+			dad.find('input.last-name-textbox').show();
+			dad.find('input.dob-datepicker').show();
+			dad.find('input.email-textbox').show();
+			dad.find('select.active-combobox').show();
+			dad.find('div.action-btns').hide();
+			dad.find('div.edit-btns').show();
+		}
+	});
+
+	$('input.cancel-btn').click(function() {
+		if ($(this).val() == "Cancel") {
+			var dad = $(this).parent().parent().parent();
+			dad.find('input.user-name-textbox').hide();
+			dad.find('input.password-textbox').hide();
+			dad.find('input.first-name-textbox').hide();
+			dad.find('input.last-name-textbox').hide();
+			dad.find('input.dob-datepicker').hide();
+			dad.find('input.email-textbox').hide();
+			dad.find('select.active-combobox').hide();
+			dad.find('span.user-name').show();
+			dad.find('span.password').show();
+			dad.find('span.first-name').show();
+			dad.find('span.last-name').show();
+			dad.find('span.date-of-birth').show();
+			dad.find('span.email').show();
+			dad.find('span.active').show();
+			dad.find('input.edit-btn').val("Edit");
+			dad.find('div.action-btns').show();
+			dad.find('div.edit-btns').hide();
+		}
+	});
+
+	$("#manager-add-btn").click(function() {
+		$("#addForm").submit();
+	});
+
+	$("input.reset-btn").click(function() {
+		var formDad = $(this).closest("tr");
+		var data = formDad.find(".management-form").serializeArray();
+		var data2JSON = {};
+		$.each(data, function(v) {
+			if (this.value != null) {
+				v = this.value;
+			} else {
+				v = '';
+			}
+			if (this.name == "dateOfBirth") {
+				v = parseDate(v, "dd/mm/yyyy");
+			}
+			if (data2JSON[this.name] != null) {
+				if (!data2JSON[this.name].push) {
+					data2JSON[this.name] = [ data2JSON[this.name] ];
 				}
-			});
-
-			$('input.edit-btn').click(function() {
-				if ($(this).val() == "Edit") {
-					var dad = $(this).parent().parent().parent();
-					dad.find('span.user-name').hide();
-					dad.find('span.password').hide();
-					dad.find('span.first-name').hide();
-					dad.find('span.last-name').hide();
-					dad.find('span.date-of-birth').hide();
-					dad.find('span.email').hide();
-					dad.find('span.active').hide();
-					dad.find('input.user-name-textbox').show();
-					dad.find('input.password-textbox').show();
-					dad.find('input.first-name-textbox').show();
-					dad.find('input.last-name-textbox').show();
-					dad.find('input.dob-datepicker').show();
-					dad.find('input.email-textbox').show();
-					dad.find('select.active-combobox').show();
-					dad.find('div.action-btns').hide();
-					dad.find('div.edit-btns').show();
-				}
-			});
-
-			$('input.cancel-btn').click(function() {
-				if ($(this).val() == "Cancel") {
-					var dad = $(this).parent().parent().parent();
-					dad.find('input.user-name-textbox').hide();
-					dad.find('input.password-textbox').hide();
-					dad.find('input.first-name-textbox').hide();
-					dad.find('input.last-name-textbox').hide();
-					dad.find('input.dob-datepicker').hide();
-					dad.find('input.email-textbox').hide();
-					dad.find('select.active-combobox').hide();
-					dad.find('span.user-name').show();
-					dad.find('span.password').show();
-					dad.find('span.first-name').show();
-					dad.find('span.last-name').show();
-					dad.find('span.date-of-birth').show();
-					dad.find('span.email').show();
-					dad.find('span.active').show();
-					dad.find('input.edit-btn').val("Edit");
-					dad.find('div.action-btns').show();
-					dad.find('div.edit-btns').hide();
-				}
-			});
-
-			$("#manager-add-btn").click(function() {
-				$("#addForm").submit();
-			});
-
-			$("input.reset-btn").click(
-					function() {
-						var data = $(this).parent().parent().parent().parent()
-								.parent().parent().find(".management-form")
-								.serializeArray();
-						var data2JSON = {};
-						$.each(data, function(v){
-						    if (this.value != null) {
-						      v = this.value;
-						    } else {
-						      v = '';
-						    }
-						    if(this.name == "dateOfBirth"){
-						    	v = parseDate(v,"dd/mm/yyyy");
-						    }
-						    if (data2JSON[this.name] != null) {
-						      if (!data2JSON[this.name].push) {
-						    	  data2JSON[this.name] = [data2JSON[this.name]];
-						      }
-						      data2JSON[this.name].push(v);
-						    } else {
-						    	data2JSON[this.name] = v;
-						    }
-						})
-						alert(JSON.stringify(data2JSON));
-						$.ajax({
-							url : 'reset.htm',
-							type : "POST",
-							contentType : "application/json; charset=utf-8",
-							dataType : "json",
-							data : JSON.stringify(data2JSON),
-							success : function() {
-								alert("Done");
-							}
-						});
-					});
+				data2JSON[this.name].push(v);
+			} else {
+				data2JSON[this.name] = v;
+			}
 		});
+		$.ajax({
+			url : 'reset.htm',
+			type : "POST",
+			contentType : "application/json; charset=utf-8",
+			dataType : "text",
+			data : JSON.stringify(data2JSON),
+			success : function (response) {
+				$("#ajaxMessage").html("<div class='alert alert-success'>" 
+						+ response + "</div>");
+			},
+			error : function (response) {
+				$("#ajaxMessage").html("<div class='alert alert-danger'>" 
+						+ response + "</div>");
+			}
+		});
+	});
+});
 
-// function load() {
-// $.ajax({
-// url : 'list.htm',
-// type : 'GET',
-// dataType : "json",
-// success : function() {
-// }
-// });
-// }
+function load(){
+	$.ajax({
+		url : 'list.htm',
+		type : "GET",
+		contentType : "application/json; charset=utf-8",
+		dataType : "json",
+		success : function (response) {
+		},
+		error : function (response) {
+		}
+	});
+}
 
 function parseDate(input, format) {
 	if (input.match("\\d{1,2}[/]\\d{1,2}[/]\\d{1,4}")) {

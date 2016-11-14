@@ -55,14 +55,7 @@
 			</div>
 			<!-- Panel body -->
 			<div class="panel-body">
-				<!-- Success message -->
-				<c:if test="${not empty successMessage}">
-					<div class="alert alert-success">${successMessage}</div>
-				</c:if>
-				<!-- Error message -->
-				<c:if test="${not empty errorMessage}">
-					<div class="alert alert-danger">${errorMessage}</div>
-				</c:if>
+				<div id="ajaxMessage"></div>
 				<!-- Div conatining information -->
 				<div>
 					<table class="table table-striped">
@@ -83,6 +76,7 @@
 								<!-- Format date to dd/mm/yyyy -->
 								<fmt:formatDate var="formatedDate"
 									value="${account.dateOfBirth}" pattern="dd/MM/yyyy" />
+
 								<tr>
 									<form:form modelAttribute="account" action="edit.htm"
 										class="management-form" method="POST">
@@ -147,7 +141,7 @@
 														<!-- Modal footer -->
 														<div class="modal-footer">
 															<input type="button" class="btn btn-primary reset-btn"
-																value="Yes" formaction="reset.htm" />
+																value="Yes" formaction="reset.htm" data-dismiss="modal" />
 															<button type="button" class="btn btn-danger"
 																data-dismiss="modal">No</button>
 														</div>
@@ -158,7 +152,6 @@
 											</div> <!-- /.modal --></td>
 									</form:form>
 								</tr>
-
 							</c:forEach>
 						</tbody>
 					</table>
