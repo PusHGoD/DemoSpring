@@ -86,29 +86,93 @@ $(document).ready(function() {
 			contentType : "application/json; charset=utf-8",
 			dataType : "text",
 			data : JSON.stringify(data2JSON),
-			success : function (response) {
-				$("#ajaxMessage").html("<div class='alert alert-success'>" 
-						+ response + "</div>");
+			success : function(response) {
+				$("#ajaxMessage")
+						.html(
+								"<div class='alert alert-success'>"
+										+ response
+										+ "</div>");
 			},
-			error : function (response) {
-				$("#ajaxMessage").html("<div class='alert alert-danger'>" 
-						+ response + "</div>");
+			error : function(response) {
+				$("#ajaxMessage")
+						.html(
+								"<div class='alert alert-danger'>"
+										+ response
+										+ "</div>");
 			}
 		});
 	});
+
+	window.actionEvents = {
+		'click .edit' : function(e, value, row, index) {
+			alert('You click edit icon, row: ' + JSON.stringify(row));
+			console.log(value, row, index);
+		},
+		'click .reset' : function(e, value, row, index) {
+			$.ajax({
+				url : 'reset.htm',
+				type : "POST",
+				contentType : "application/json; charset=utf-8",
+				dataType : "text",
+				data : JSON.stringify(row),
+				success : function(response) {
+					$("#ajaxMessage")
+							.html(
+									"<div class='alert alert-success'>"
+											+ response
+											+ "</div>");
+				},
+				error : function(response) {
+					$("#ajaxMessage")
+							.html(
+									"<div class='alert alert-danger'>"
+											+ response
+											+ "</div>");
+				}
+			});
+		}
+	};
 });
 
-function load(){
+function load() {
 	$.ajax({
 		url : 'list.htm',
 		type : "GET",
+		headers: {
+            Accept: 'application/json'
+        },
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
-		success : function (response) {
+		success : function(list) {
+			$('#table').bootstrapTable({
+				data : list
+			});
 		},
-		error : function (response) {
+		error : function(list) {
+			
 		}
 	});
+}
+
+function dateFormatter(value, row, index) {
+	 var date = new Date(value);
+	 var mm = date.getMonth()+1;
+	 var dd = date.getDate();
+	 var yyyy = new String(date.getFullYear());
+	 if (mm < 10) { 
+	    mm = "0"+mm;
+	 }
+	 if (dd < 10) {
+	    dd = "0"+dd;
+	  }
+	 return dd+"/"+mm+"/"+yyyy;
+}
+
+function actionFormatter(value, row, index) {
+	return [ '<a class="edit ml10" href="javascript:void(0)" title="Edit">',
+			'<i class="glyphicon glyphicon-edit"></i>', '</a>',
+			'<a class="reset ml10" href="javascript:void(0)" title="Reset">',
+			'<i class="glyphicon glyphicon-remove"></i>', '</a>' ].join('');
 }
 
 function parseDate(input, format) {

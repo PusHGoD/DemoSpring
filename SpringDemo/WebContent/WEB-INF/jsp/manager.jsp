@@ -28,12 +28,18 @@
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker3.min.css" />
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
+
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.css" />
+<script
+	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.js"></script>
+
 <!-- Custom javascript file (mostly validation) -->
 <script type="text/javascript"
 	src='<c:url value="/Resources/js/custom.js"/>'></script>
 <title>Manager Page</title>
 </head>
-<body>
+<body onload="load();">
 	<!-- If user has not logged in yet, redirect to login page -->
 	<c:if test="${empty accountInfo or accountInfo.role.id != 1}">
 		<c:redirect url="redirect.jsp" />
@@ -58,102 +64,21 @@
 				<div id="ajaxMessage"></div>
 				<!-- Div conatining information -->
 				<div>
-					<table class="table table-striped">
+					<table id="table" data-method="POST" data-show-refresh="true"
+						data-show-toggle="true" data-content-type="application/json">
 						<thead>
 							<tr>
-								<th>ID</th>
-								<th>Username</th>
-								<th>First name</th>
-								<th>Last name</th>
-								<th>Date of birth</th>
-								<th>Email</th>
-								<th>Active</th>
-								<th></th>
+								<th data-field="id">ID</th>
+								<th data-field="userName">Username</th>
+								<th data-field="firstName">First name</th>
+								<th data-field="lastName">Last name</th>
+								<th data-field="dateOfBirth" data-formatter="dateFormatter">Date of birth</th>
+								<th data-field="email">Email</th>
+								<th data-field="active">Active</th>
+								<th data-field="action" data-formatter="actionFormatter"
+									data-events="actionEvents"></th>
 							</tr>
 						</thead>
-						<tbody>
-							<c:forEach var="account" items="${accountList}">
-								<!-- Format date to dd/mm/yyyy -->
-								<fmt:formatDate var="formatedDate"
-									value="${account.dateOfBirth}" pattern="dd/MM/yyyy" />
-
-								<tr>
-									<form:form modelAttribute="account" action="edit.htm"
-										class="management-form" method="POST">
-										<td><form:hidden path="id" value="${account.id}" />${account.id}</td>
-										<td><span class="user-name">${account.userName}</span> <form:input
-												path="userName" class="form-control user-name-textbox"
-												placeholder="Username" style="display: none"
-												value="${account.userName}" /></td>
-										<td><span class="first-name">${account.firstName}</span>
-											<form:input path="firstName" type="text"
-												class="form-control first-name-textbox"
-												value="${account.firstName}" placeholder="First name"
-												id="password" style="display: none" /></td>
-										<td><span class="last-name">${account.lastName}</span> <form:input
-												path="lastName" type="text"
-												class="form-control last-name-textbox"
-												value="${account.lastName}" placeholder="Last name"
-												id="lastname" style="display: none" /></td>
-										<td><span class="date-of-birth">${formatedDate}</span> <form:input
-												path="dateOfBirth" data-provide="datepicker"
-												class="form-control dob-datepicker"
-												data-date-format="dd/mm/yyyy" value="${formatedDate}"
-												placeholder="dd/mm/yyyy" id="dob" style="display: none" /></td>
-										<td><span class="email">${account.email}</span> <form:input
-												path="email" type="text" class="form-control email-textbox"
-												value="${account.email}" placeholder="Email" id="email"
-												style="display: none" /></td>
-										<td><c:if test="${account.active}">
-												<span class="active"><strong class="text-success">Active</strong></span>
-											</c:if> <c:if test="${!account.active}">
-												<span class="active"><strong class="text-danger">Inactive</strong></span>
-											</c:if> <form:select path="active"
-												class="form-control active-combobox" style="display: none">
-												<form:option value="true">Active</form:option>
-												<form:option value="false">Inactive</form:option>
-											</form:select></td>
-										<td><div class="action-btns">
-												<input type="button" class="btn btn-primary edit-btn"
-													value="Edit" /> <input type="button"
-													class="btn btn-warning" value="Reset" data-toggle="modal"
-													data-target="#resetModal${account.id}" />
-											</div>
-											<div class="edit-btns" style="display: none">
-												<input type="submit" class="btn btn-primary save-btn"
-													value="Save" /> <input type="button"
-													class="btn btn-link cancel-btn" value="Cancel" />
-											</div>
-											<div class="modal fade" id="resetModal${account.id}"
-												tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-												aria-hidden="true">
-												<div class="modal-dialog">
-													<div class="modal-content">
-														<!-- Modal header -->
-														<div class="modal-header">
-															<button type="button" class="close" data-dismiss="modal"
-																aria-hidden="true">×</button>
-															<h4 class="modal-title">Reset password</h4>
-														</div>
-														<!-- Modal body -->
-														<div class="modal-body">Do you want to reset
-															password for this account?</div>
-														<!-- Modal footer -->
-														<div class="modal-footer">
-															<input type="button" class="btn btn-primary reset-btn"
-																value="Yes" formaction="reset.htm" data-dismiss="modal" />
-															<button type="button" class="btn btn-danger"
-																data-dismiss="modal">No</button>
-														</div>
-													</div>
-													<!-- /.modal-content -->
-												</div>
-												<!-- /.modal-dialog -->
-											</div> <!-- /.modal --></td>
-									</form:form>
-								</tr>
-							</c:forEach>
-						</tbody>
 					</table>
 					<input type="button" class="btn btn-primary" value="Add user"
 						data-toggle="modal" data-target="#editModal" />

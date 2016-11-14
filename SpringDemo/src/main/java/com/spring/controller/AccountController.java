@@ -24,6 +24,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.spring.entity.Account;
 import com.spring.service.AccountService;
 
@@ -184,6 +186,13 @@ public class AccountController {
 		model.put("accountList", service.getAccountList());
 		// Redirect to home page
 		return "manager";
+	}
+
+	@RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=*/*", produces = "application/json")
+	public @ResponseBody String loadAccountList() throws JsonProcessingException {
+		List<Account> list = service.getAccountList();
+		ObjectMapper mapper = new ObjectMapper();
+		return mapper.writeValueAsString(list);
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
