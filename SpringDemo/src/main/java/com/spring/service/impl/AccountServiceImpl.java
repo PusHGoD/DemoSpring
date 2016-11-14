@@ -69,6 +69,11 @@ public class AccountServiceImpl implements AccountService {
 		return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#getAccountList()
+	 */
 	public List<Account> getAccountList() {
 		return dao.findAll();
 	}
@@ -109,12 +114,14 @@ public class AccountServiceImpl implements AccountService {
 	 * @see com.spring.service.AccountService#addNewAccount(com.spring.entity.
 	 * Account, java.lang.String)
 	 */
-	public boolean addNewAccount(Account input, int passSize) {
+	public boolean addNewAccount(Account input, String from, String to, int passSize) {
 		if (input != null) {
-			input.setPassword(encryptMD5(randomPassword(passSize)));
+			String enpass = randomPassword(passSize);
+			input.setPassword(encryptMD5(enpass));
 			Role role = new Role();
 			role.setId(1);
 			input.setRole(role);
+			dao.sendAddMail(from, to, input.getUserName(), enpass);
 			return dao.addAccount(input);
 		}
 		return false;

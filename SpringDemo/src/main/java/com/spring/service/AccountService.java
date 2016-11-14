@@ -31,15 +31,19 @@ public interface AccountService {
 	 */
 	public boolean updateAccountInfo(Account input);
 	
+	/**
+	 * @return
+	 */
 	public List<Account> getAccountList();
 	
 	/**
 	 * @param input
-	 * @param strDOB
+	 * @param from
+	 * @param to
+	 * @param passSize
 	 * @return
-	 * @throws ParseException
 	 */
-	public boolean addNewAccount(Account input, int passSize);
+	public boolean addNewAccount(Account input, String from, String to, int passSize);
 	
 	/**
 	 * @param from

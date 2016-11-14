@@ -183,7 +183,6 @@ public class AccountController {
 	 */
 	@RequestMapping(value = "/manager", method = RequestMethod.GET)
 	public String getManagerPage(ModelMap model, @ModelAttribute("account") Account account) {
-		model.put("accountList", service.getAccountList());
 		// Redirect to home page
 		return "manager";
 	}
@@ -196,35 +195,43 @@ public class AccountController {
 	}
 
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
-	public String addAccount(ModelMap model, @ModelAttribute("account") Account account) {
-		service.addNewAccount(account, 9);
-		return "manager";
+	public @ResponseBody String addAccount(@RequestBody Account account) {
+		try {
+			// Update account and get result
+			boolean result = service.addNewAccount(account, "minhhuan@test.com", account.getEmail(), 9);
+			// Check if update operation is successful
+			if (result) {
+				// Redirect to home page
+				return "You have added new user!";
+			} else {
+				// Redirect to home page
+				return "Error in adding user!";
+			}
+		} catch (HibernateException e) {
+			// Log Hibernate error message
+			logger.error("Error in processing request in DB :" + e.getMessage());
+		}
+		return "Error occurred in DB processing";
 	}
 
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
-	public String editAccount(ModelMap model, @ModelAttribute("account") Account account) {
+	public @ResponseBody String editAccount(@RequestBody Account account) {
 		try {
 			// Update account and get result
 			boolean result = service.updateAccountInfo(account);
 			// Check if update operation is successful
 			if (result) {
-				// Put success message to home page
-				model.put("successMessage", "Your information has been updated!");
 				// Redirect to home page
-				return "redirect:/manager.htm";
+				return "You have updated user "+account.getUserName()+"!";
 			} else {
-				// Put error message to home page
-				model.put("errorMessage", "Error in updating account! No update processed");
 				// Redirect to home page
-				return "redirect:/manager.htm";
+				return "Error in updating user!";
 			}
 		} catch (HibernateException e) {
-			// Put error message to home page
-			model.put("errorMessage", "Error occurred in processing request!");
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
-		return "redirect:/manager.htm";
+		return "Error occurred in DB processing";
 	}
 
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
@@ -246,44 +253,6 @@ public class AccountController {
 		}
 		return "Error occurred in DB processing";
 	}
-
-	// @RequestMapping(value = "/reset", method = RequestMethod.POST)
-	// public String resetPassword(ModelMap model, @ModelAttribute("account")
-	// Account account) {
-	// try {
-	// // Update account and get result
-	// boolean result = service.resetPassword(account, "minhhuan@test.com",
-	// account.getEmail());
-	// // Check if update operation is successful
-	// if (result) {
-	// // Put success message to home page
-	// model.put("successMessage", "Password resetted!");
-	// // Redirect to home page
-	// return "redirect:/manager.htm";
-	// } else {
-	// // Put error message to home page
-	// model.put("errorMessage", "Error in updating password! No update
-	// processed");
-	// // Redirect to home page
-	// return "redirect:/manager.htm";
-	// }
-	// } catch (HibernateException e) {
-	// // Put error message to home page
-	// model.put("errorMessage", "Error occurred in processing request!");
-	// // Log Hibernate error message
-	// logger.error("Error in processing request in DB :" + e.getMessage());
-	// }
-	// return "redirect:/manager.htm";
-	// }
-
-	// @RequestMapping(value = "/list")
-	// public @ResponseBody String getAccountList(ModelMap model) {
-	// List<Account> list = new ArrayList<Account>();
-	// list = service.getAccountList();
-	// model.put("accountList", list);
-	// // Redirect to home page
-	// return "manager";
-	// }
 
 	/**
 	 * @param session
