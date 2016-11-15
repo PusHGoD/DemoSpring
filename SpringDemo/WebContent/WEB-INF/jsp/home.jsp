@@ -132,7 +132,7 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<input type="submit" class="btn btn-primary" id="user-update-btn" />
+						<button type="button" class="btn btn-primary" id="user-update-btn">Update</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->

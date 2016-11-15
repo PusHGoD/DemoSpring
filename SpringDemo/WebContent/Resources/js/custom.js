@@ -324,7 +324,7 @@ function checkUpdateInput() {
 	} else if (email.length > 50) {
 		$("#email_error").html("Email is too long.");
 		result = false;
-	} else if (!email.matches("^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+)?$")){
+	} else if (!email.match("^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+)?$")){
 		$("#email_error").html("Email's format is not valid");
 		result = false;
 	}
