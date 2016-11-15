@@ -97,7 +97,7 @@
 								<th data-field="dateOfBirth" data-formatter="dateFormatter">Date
 									of birth</th>
 								<th data-field="email">Email</th>
-								<th data-field="active">Active</th>
+								<th data-field="active" data-formatter="activeFormatter">Active</th>
 								<th data-field="action" data-formatter="actionFormatter"
 									data-events="actionEvents"></th>
 							</tr>
@@ -126,7 +126,7 @@
 							User name:
 							<form:input path="userName" type="text" class="form-control"
 								value="" placeholder="User name"/>
-							<div id="firstname_error" class="text-danger"></div>
+							<div id="username_error" class="text-danger"></div>
 						</div>
 						<!-- First name -->
 						<div class="form-group">
@@ -156,7 +156,7 @@
 							Email:
 							<form:input path="email" type="text" class="form-control"
 								value="" placeholder="Email" />
-							<div id="firstname_error" class="text-danger"></div>
+							<div id="email_error" class="text-danger"></div>
 						</div>
 						<!-- Active -->
 						<div class="form-group">
@@ -170,7 +170,7 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" id="manager-add-btn" data-dismiss="modal">Add</button>
+						<button type="button" class="btn btn-primary" id="manager-add-btn">Add</button>
 					</div>
 				</form:form>
 			</div>
@@ -198,7 +198,7 @@
 							User name:
 							<form:input path="userName" type="text" class="form-control"
 								value="" placeholder="User name" />
-							<div id="firstname_error" class="text-danger"></div>
+							<div id="username_error" class="text-danger"></div>
 						</div>
 						<!-- First name -->
 						<div class="form-group">
@@ -228,7 +228,7 @@
 							Email:
 							<form:input path="email" type="text" class="form-control"
 								value="" placeholder="Email" />
-							<div id="firstname_error" class="text-danger"></div>
+							<div id="email_error" class="text-danger"></div>
 						</div>
 						<!-- Active -->
 						<div class="form-group">
@@ -242,7 +242,7 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" id="manager-edit-btn" data-dismiss="modal">Update</button>
+						<button type="button" class="btn btn-primary" id="manager-edit-btn">Update</button>
 					</div>
 				</form:form>
 			</div>

@@ -38,19 +38,5 @@ public interface AccountDAO {
 	 * @return
 	 */
 	public boolean updatePassword(Account account, String password);
-
-	/**
-	 * @param from
-	 * @param to
-	 * @param username
-	 * @param password
-	 */
-	public void sendAddMail(String from, String to, String username, String password);
 	
-	/**
-	 * @param from
-	 * @param to
-	 * @param password
-	 */
-	public void sendResetMail(String from, String to, String password);
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
 import com.spring.entity.Role;
+import com.spring.mail.CustomMailHandler;
 import com.spring.service.AccountService;
 
 /**
@@ -28,6 +29,8 @@ public class AccountServiceImpl implements AccountService {
 	 */
 	@Autowired
 	private AccountDAO dao;
+
+	private CustomMailHandler mail = new CustomMailHandler();
 
 	/*
 	 * (non-Javadoc)
@@ -119,9 +122,9 @@ public class AccountServiceImpl implements AccountService {
 			String enpass = randomPassword(passSize);
 			input.setPassword(encryptMD5(enpass));
 			Role role = new Role();
-			role.setId(1);
+			role.setId(2);
 			input.setRole(role);
-			dao.sendAddMail(from, to, input.getUserName(), enpass);
+			mail.sendAddMail(from, to, input.getUserName(), enpass);
 			return dao.addAccount(input);
 		}
 		return false;
@@ -137,7 +140,7 @@ public class AccountServiceImpl implements AccountService {
 
 		if (input != null && from != null && to != null) {
 			String password = randomPassword(9);
-			dao.sendResetMail(from, to, password);
+			mail.sendResetMail(from, to, password);
 			return dao.updatePassword(input, encryptMD5(password));
 		}
 		return false;

@@ -15,93 +15,108 @@ $(document).ready(
 			});
 
 			$("#manager-add-btn").click(function() {
-				var data = $("#addModal").find("#addForm").serializeArray();
-				var data2JSON = {};
-				$.each(data, function(v) {
-				if (this.value != null) {
-					v = this.value;
-				} else {
-					v = '';
-				}
-				if (this.name == "dateOfBirth") {
-					v = parseDate(v, "dd/mm/yyyy");
-				}
-				if (data2JSON[this.name] != null) {
-					if (!data2JSON[this.name].push) {
-						data2JSON[this.name] = [ data2JSON[this.name] ];
+				if (checkManagementInput($("#addModal"))){
+					var data = $("#addModal").find("#addForm").serializeArray();
+					var data2JSON = {};
+					$.each(data, function(v) {
+					if (this.value != null) {
+						v = this.value;
+					} else {
+						v = '';
 					}
-					data2JSON[this.name].push(v);
-				} else {
-					data2JSON[this.name] = v;
+					if (this.name == "dateOfBirth") {
+						v = parseDate(v, "dd/mm/yyyy");
+					}
+					if (data2JSON[this.name] != null) {
+						if (!data2JSON[this.name].push) {
+							data2JSON[this.name] = [ data2JSON[this.name] ];
+						}
+						data2JSON[this.name].push(v);
+					} else {
+						data2JSON[this.name] = v;
+					}
+					});
+					$.ajax({
+						    url : 'add.htm',
+						    type : "POST",
+						    contentType : "application/json; charset=utf-8",
+						    dataType : "text",
+						    data : JSON.stringify(data2JSON),
+						    success : function(response) {
+						    $("#ajaxMessage")
+						       .html(
+						         "<div class='alert alert-success'>"
+						           + response
+						           + "</div>");
+						    load();
+						    $("#ajaxMessage").fadeIn();	
+						    $("#ajaxMessage").fadeOut(5000);
+						    },
+						    error : function(response) {
+						    $("#ajaxMessage")
+						       .html(
+						         "<div class='alert alert-danger'>"
+						           + response
+						           + "</div>");
+						    $("#ajaxMessage").fadeIn();	
+						    $("#ajaxMessage").fadeOut(5000);
+						    }
+						   });
+					$("#addModal").modal("hide");
 				}
-				});
-				$.ajax({
-					    url : 'add.htm',
-					    type : "POST",
-					    contentType : "application/json; charset=utf-8",
-					    dataType : "text",
-					    data : JSON.stringify(data2JSON),
-					    success : function(response) {
-					    $("#ajaxMessage")
-					       .html(
-					         "<div class='alert alert-success'>"
-					           + response
-					           + "</div>");
-					    load();
-					    },
-					    error : function(response) {
-					    $("#ajaxMessage")
-					       .html(
-					         "<div class='alert alert-danger'>"
-					           + response
-					           + "</div>");
-					    }
-					   });
 			});
 
 			$("#manager-edit-btn").click(function() {
-				var data = $("#editModal").find("#editForm").serializeArray();
-				var data2JSON = {};
-				$.each(data, function(v) {
-				if (this.value != null) {
-					v = this.value;
-				} else {
-					v = '';
-				}
-				if (this.name == "dateOfBirth") {
-					v = parseDate(v, "dd/mm/yyyy");
-				}
-				if (data2JSON[this.name] != null) {
-					if (!data2JSON[this.name].push) {
-						data2JSON[this.name] = [ data2JSON[this.name] ];
+				if (checkManagementInput($("#editModal"))){
+					var data = $("#editModal").find("#editForm").serializeArray();
+					var data2JSON = {};
+					$.each(data, function(v) {
+					if (this.value != null) {
+						v = this.value;
+					} else {
+						v = '';
 					}
-					data2JSON[this.name].push(v);
-				} else {
-					data2JSON[this.name] = v;
+					if (this.name == "dateOfBirth") {
+						v = parseDate(v, "dd/mm/yyyy");
+					}
+					if (data2JSON[this.name] != null) {
+						if (!data2JSON[this.name].push) {
+							data2JSON[this.name] = [ data2JSON[this.name] ];
+						}
+						data2JSON[this.name].push(v);
+					} else {
+						data2JSON[this.name] = v;
+					}
+					});
+					$.ajax({
+						    url : 'edit.htm',
+						    type : "POST",
+						    contentType : "application/json; charset=utf-8",
+						    dataType : "text",
+						    data : JSON.stringify(data2JSON),
+						    success : function(response) {
+						    $("#ajaxMessage")
+						       .html(
+						         "<div class='alert alert-success'>"
+						           + response
+						           + "</div>");
+						    load();
+						    $("#ajaxMessage").fadeIn();	
+						    $("#ajaxMessage").fadeOut(5000);
+						    },
+						    error : function(response) {
+						    $("#ajaxMessage")
+						       .html(
+						         "<div class='alert alert-danger'>"
+						           + response
+						           + "</div>");
+						    $("#ajaxMessage").fadeIn();	
+						    $("#ajaxMessage").fadeOut(5000);
+						    }
+						 
+						   });
+					$("#editModal").modal("hide");
 				}
-				});
-				$.ajax({
-					    url : 'edit.htm',
-					    type : "POST",
-					    contentType : "application/json; charset=utf-8",
-					    dataType : "text",
-					    data : JSON.stringify(data2JSON),
-					    success : function(response) {
-					    $("#ajaxMessage")
-					       .html(
-					         "<div class='alert alert-success'>"
-					           + response
-					           + "</div>");
-					    load();
-					    },
-					    error : function(response) {
-					    $("#ajaxMessage")
-					       .html(
-					         "<div class='alert alert-danger'>"
-					           + response
-					           + "</div>");
-					    }
-					   });
 			});
 			
 			window.actionEvents = {
@@ -152,6 +167,7 @@ function load() {
 		contentType : "application/json; charset=utf-8",
 		dataType : "json",
 		success : function(list) {
+		$('#table').bootstrapTable("destroy");
 		$('#table').bootstrapTable({
 			data : list
 		});
@@ -188,11 +204,21 @@ function dateFormatter(value, row, index) {
 	return dd + "/" + mm + "/" + yyyy;
 }
 
+function activeFormatter(value, row, index) {
+	if (value == true){
+		return "Active";
+	}
+	else {
+		return "Inactive";	
+	}
+}
+
 function actionFormatter(value, row, index) {
 	return ['<a class="reset ml10" href="javascript:void(0)" title="Reset">',
 			'<i class="glyphicon glyphicon-refresh"></i>', '</a>' ].join('');
 }
 
+/* Date operations */
 function formatDate(input) {
 	var date = new Date(input);
 	var mm = date.getMonth() + 1;
@@ -250,6 +276,7 @@ function checkUpdateInput() {
 	var firstname = $("#firstName").val();
 	var lastname = $("#lastName").val();
 	var dob = $("#dateOfBirth").val();
+	var email = $("#email").val();
 	var result = true;
 	if (firstname == null || firstname == "") {
 		$("#firstname_error").html("Please enter first name.");
@@ -289,6 +316,92 @@ function checkUpdateInput() {
 				$("#dob_error").html("");
 			}
 		}
+	}
+	
+	if (email == null || email == "") {
+		$("#email_error").html("Please enter email.");
+		result = false;
+	} else if (email.length > 50) {
+		$("#email_error").html("Email is too long.");
+		result = false;
+	} else if (!email.matches("^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+)?$")){
+		$("#email_error").html("Email's format is not valid");
+		result = false;
+	}
+	else {
+		$("#email_error").html("");
+	}
+	return result;
+}
+
+function checkManagementInput(parent){
+	var username = parent.find("#userName").val();
+	var firstname = parent.find("#firstName").val();
+	var lastname = parent.find("#lastName").val();
+	var dob = parent.find("#dateOfBirth").val();
+	var email = parent.find("#email").val();
+	var result = true;
+	if (username == null || username == "") {
+		parent.find("#username_error").html("Please enter username.");
+		result = false;
+	} else if (username.length > 20) {
+		parent.find("#username_error").html("Username is too long.");
+		result = false;
+	} else {
+		parent.find("#username_error").html("");
+	}
+	if (firstname == null || firstname == "") {
+		parent.find("#firstname_error").html("Please enter first name.");
+		result = false;
+	} else if (firstname.length > 30) {
+		parent.find("#firstname_error").html("First name is too long.");
+		result = false;
+	} else {
+		parent.find("#firstname_error").html("");
+	}
+	if (lastname == null || lastname == "") {
+		parent.find("#lastname_error").html("Please enter last name.");
+		result = false;
+	} else if (lastname.length > 30) {
+		parent.find("#lastname_error").html("Last name is too long.");
+		result = false;
+	} else {
+		parent.find("#lastname_error").html("");
+	}
+
+	if (dob == null || dob == "") {
+		parent.find("#dob_error").html("Please enter date of birth.");
+		result = false;
+	} else {
+		var date = parseDate(dob, "dd/mm/yyyy");
+		if (date == null) {
+			parent.find("#dob_error").html("Date of birth is not in correct format.");
+			result = false;
+		} else {
+			var today = new Date();
+			today.setDate(today.getDate() - 1);
+			if (date >= today) {
+				parent.find("#dob_error").html(
+						"Date of birth cannot be later than today.");
+				result = false;
+			} else {
+				parent.find("#dob_error").html("");
+			}
+		}
+	}
+	
+	if (email == null || email == "") {
+		parent.find("#email_error").html("Please enter email.");
+		result = false;
+	} else if (email.length > 50) {
+		parent.find("#email_error").html("Email is too long.");
+		result = false;
+	} else if (!email.match("^(([a-zA-Z0-9_.-])+@([a-zA-Z0-9_.-])+\.([a-zA-Z])+([a-zA-Z])+)?$")){
+		parent.find("#email_error").html("Email's format is not valid");
+		result = false;
+	}
+	else {
+		parent.find("#email_error").html("");
 	}
 	return result;
 }

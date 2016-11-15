@@ -120,8 +120,14 @@
 								placeholder="dd/mm/yyyy" />
 							<div id="dob_error" class="text-danger"></div>
 						</div>
+						<!--  Email -->
+						<div class="form-group">
+							Email:
+							<form:input path="email" type="text" class="form-control"
+								value="${accountInfo.email}" placeholder="xxx@yyy.com" />
+							<div id="email_error" class="text-danger"></div>
+						</div>
 					</div>
-					<form:hidden path="email" value="${accountInfo.email}" />
 					<form:hidden path="active" value="${accountInfo.active}" />
 					<!-- Modal footer -->
 					<div class="modal-footer">
