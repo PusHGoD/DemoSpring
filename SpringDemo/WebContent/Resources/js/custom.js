@@ -43,23 +43,11 @@ $(document).ready(
 						    dataType : "text",
 						    data : JSON.stringify(data2JSON),
 						    success : function(response) {
-						    $("#ajaxMessage")
-						       .html(
-						         "<div class='alert alert-success'>"
-						           + response
-						           + "</div>");
-						    load();
-						    $("#ajaxMessage").fadeIn();	
-						    $("#ajaxMessage").fadeOut(5000);
+						    	load();
+						    	showAJAXSuccessMessage(response);
 						    },
 						    error : function(response) {
-						    $("#ajaxMessage")
-						       .html(
-						         "<div class='alert alert-danger'>"
-						           + response
-						           + "</div>");
-						    $("#ajaxMessage").fadeIn();	
-						    $("#ajaxMessage").fadeOut(5000);
+						    	showAJAXErrorMessage(response);
 						    }
 						   });
 					$("#addModal").modal("hide");
@@ -95,23 +83,11 @@ $(document).ready(
 						    dataType : "text",
 						    data : JSON.stringify(data2JSON),
 						    success : function(response) {
-						    $("#ajaxMessage")
-						       .html(
-						         "<div class='alert alert-success'>"
-						           + response
-						           + "</div>");
-						    load();
-						    $("#ajaxMessage").fadeIn();	
-						    $("#ajaxMessage").fadeOut(5000);
+						    	load();
+						    	showAJAXSuccessMessage(response);
 						    },
 						    error : function(response) {
-						    $("#ajaxMessage")
-						       .html(
-						         "<div class='alert alert-danger'>"
-						           + response
-						           + "</div>");
-						    $("#ajaxMessage").fadeIn();	
-						    $("#ajaxMessage").fadeOut(5000);
+						    	showAJAXErrorMessage(response);
 						    }
 						 
 						   });
@@ -128,14 +104,10 @@ $(document).ready(
 						dataType : "text",
 						data : JSON.stringify(row),
 						success : function(response) {
-							$("#ajaxMessage").html(
-									"<div class='alert alert-success'>"
-											+ response + "</div>");
+							showAJAXSuccessMessage(response);
 						},
-						error : function(response) {
-							$("#ajaxMessage").html(
-									"<div class='alert alert-danger'>"
-											+ response + "</div>");
+						error : function(response){
+							showAJAXErrorMessage(response);
 						}
 					});
 				}
@@ -144,22 +116,28 @@ $(document).ready(
 			$("#editButton").click(
 				function() {
 					var acc = getSelectedRow();
-					$("#editModal").find("#id").val(acc.id);
-					$("#editModal").find("#userName").val(acc.userName);
-					$("#editModal").find("#firstName").val(acc.firstName);
-					$("#editModal").find("#lastName").val(acc.lastName);
-					$("#editModal").find("#dateOfBirth").val(
-					formatDate(acc.dateOfBirth));
-					$("#editModal").find("#email").val(acc.email);
-					if (acc.active) {
-						$("#editModal").find("input[value='true']").prop(
-								'checked', true);
-					} else
-						$("#editModal").find("input[value='false']").prop(
-								'checked', true);
+					if (acc != null){
+						$("#editModal").find("#id").val(acc.id);
+						$("#editModal").find("#userName").val(acc.userName);
+						$("#editModal").find("#firstName").val(acc.firstName);
+						$("#editModal").find("#lastName").val(acc.lastName);
+						$("#editModal").find("#dateOfBirth").val(
+						formatDate(acc.dateOfBirth));
+						$("#editModal").find("#email").val(acc.email);
+						if (acc.active) {
+							$("#editModal").find("input[value='true']").prop(
+									'checked', true);
+						} else {
+							$("#editModal").find("input[value='false']").prop(
+									'checked', true);
+						}
+					} else {
+						$("#editButton").prop('disabled', true);
+					}
 				});
 		});
 
+/* Load table */
 function load() {
 	$.ajax({
 		url : 'list.htm',
@@ -185,11 +163,30 @@ function load() {
 		});
 }
 
+/* Get selected row */
 function getSelectedRow() {
 	var index = $("#table").find('tr.success').data('index');
 	return $("table").bootstrapTable('getData')[index];
 }
 
+function showAJAXSuccessMessage(response){
+	$("#ajaxMessage").html(
+       "<div class='alert alert-success'>"
+         + response
+         + "</div>");
+	$("#ajaxMessage").fadeIn();	
+	$("#ajaxMessage").fadeOut(2500);
+}
+
+function showAJAXErrorMessage(response){
+	$("#ajaxMessage").html(
+			"<div class='alert alert-danger'>"
+					+ response + "</div>");
+	$("#ajaxMessage").fadeIn();	
+    $("#ajaxMessage").fadeOut(2500);
+}
+
+/* Bootstrap table formatters */
 function dateFormatter(value, row, index) {
 	var date = new Date(value);
 	var mm = date.getMonth() + 1;
@@ -247,6 +244,7 @@ function parseDate(input, format) {
 	}
 }
 
+/* Input validation */
 function checkLoginInput() {
 	var username = $("#username").val();
 	var password = $("#password").val();

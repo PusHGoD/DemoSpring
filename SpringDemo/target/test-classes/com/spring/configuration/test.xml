@@ -8,43 +8,20 @@
 	http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.2.xsd">
 
 	<!-- Configuration -->
-	<context:component-scan base-package="com.spring.controller" />
-	<context:property-placeholder location="classpath:hibernate.properties" />
-	<mvc:annotation-driven />
-	<mvc:resources mapping="/Resources/**" location="/Resources/" />
 	<tx:annotation-driven />
-
-	<!-- View Resolver definition -->
-	<bean id="viewResolver"
-		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-		<property name="prefix">
-			<value>/WEB-INF/jsp/</value>
-		</property>
-		<property name="suffix">
-			<value>.jsp</value>
-		</property>
-	</bean>
-
-	<bean id="jsonConverter"
-		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
-		<property name="supportedMediaTypes" value="application/json" />
-	</bean>
 
 	<!-- Account DAO implementation definition -->
 	<bean id="accountdao" class="com.spring.dao.impl.AccountDAOImpl">
 	</bean>
 
-	<!-- Account service definition -->
-	<bean id="accountService" class="com.spring.service.impl.AccountServiceImpl">
-	</bean>
-
 	<!-- Datasource definition -->
 	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
 		destroy-method="close">
-		<property name="driverClassName" value="${jdbc.driver}" />
-		<property name="url" value="${jdbc.url}" />
-		<property name="username" value="${jdbc.username}" />
-		<property name="password" value="${jdbc.password}" />
+		<property name="driverClassName" value="org.h2.Driver" />
+		<property name="url"
+			value="jdbc:h2:mem:springdemo;DB_CLOSE_DELAY=-1;INIT= CREATE SCHEMA IF NOT EXISTS springdemo" />
+		<property name="username" value="sa" />
+		<property name="password" value="" />
 	</bean>
 
 	<!-- Hibernate 5 SessionFactory Bean definition -->
@@ -59,9 +36,9 @@
 		</property>
 		<property name="hibernateProperties">
 			<props>
-				<prop key="hibernate.dialect">${hibernate.dialect}
+				<prop key="hibernate.dialect">org.hibernate.dialect.H2Dialect
 				</prop>
-				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
+				<prop key="hibernate.hbm2ddl.auto">create-drop</prop>
 			</props>
 		</property>
 	</bean>

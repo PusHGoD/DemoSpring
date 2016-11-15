@@ -29,14 +29,16 @@
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.min.js"></script>
 
-<link rel="stylesheet"
-	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/filter/bootstrap-table-filter.js" />
-<script
-	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/filter-control/bootstrap-table-filter-control.js"></script>
+<!-- Bootstrap table -->
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.css" />
 <script
 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/bootstrap-table.js"></script>
+
+<!-- <link rel="stylesheet" -->
+<!-- 	href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/filter/bootstrap-table-filter.js" /> -->
+<!-- <script -->
+<!-- 	src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.0/extensions/filter-control/bootstrap-table-filter-control.js"></script>	 -->
 <!-- <link -->
 <!-- 	href="https://cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/bootstrap3-editable/css/bootstrap-editable.css" -->
 <!-- 	rel="stylesheet" /> -->
@@ -75,19 +77,24 @@
 				<div id="ajaxMessage"></div>
 				<!-- Div conatining information -->
 				<div>
+					<!-- Toolbar -->
 					<div id="toolbar" class="btn-group">
+						<!-- Add button -->
 						<button type="button" id="addButton" class="btn btn-default"
 							data-toggle="modal" data-target="#addModal">
 							<i class="glyphicon glyphicon-plus"></i>
 						</button>
+						<!-- Edit button -->
 						<button type="button" id="editButton" class="btn btn-default"
 							data-toggle="modal" data-target="#editModal" disabled="disabled">
 							<i class="glyphicon glyphicon-edit"></i>
 						</button>
 					</div>
+					<!-- JSON auto-generated table -->
 					<table id="table" class="table" data-method="POST"
-						data-show-toggle="true" data-content-type="application/json"
-						data-toolbar="#toolbar">
+						data-show-toggle="true" data-toolbar="#toolbar"
+						data-pagination="true" data-page-list="[10, 20, 50, 100, 200]"
+						data-content-type="application/json">
 						<thead>
 							<tr>
 								<th data-field="id">ID</th>
@@ -125,21 +132,21 @@
 						<div class="form-group">
 							User name:
 							<form:input path="userName" type="text" class="form-control"
-								value="" placeholder="User name"/>
+								value="" placeholder="User name" />
 							<div id="username_error" class="text-danger"></div>
 						</div>
 						<!-- First name -->
 						<div class="form-group">
 							First name:
 							<form:input path="firstName" type="text" class="form-control"
-								value="" placeholder="First name"/>
+								value="" placeholder="First name" />
 							<div id="firstname_error" class="text-danger"></div>
 						</div>
 						<!-- Last name -->
 						<div class="form-group">
 							Last name:
 							<form:input path="lastName" type="text" class="form-control"
-								value="" placeholder="Last name"/>
+								value="" placeholder="Last name" />
 							<div id="lastname_error" class="text-danger"></div>
 						</div>
 						<!-- Date of birth -->
@@ -163,7 +170,7 @@
 							Active:
 							<form:radiobutton path="active" value="true" checked="true" />
 							<strong class="text-success">Active</strong>
-							<form:radiobutton path="active" value="false"/>
+							<form:radiobutton path="active" value="false" />
 							<strong class="text-danger">Inactive</strong>
 						</div>
 					</div>
@@ -242,7 +249,8 @@
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary" id="manager-edit-btn">Update</button>
+						<button type="button" class="btn btn-primary"
+							id="manager-edit-btn">Update</button>
 					</div>
 				</form:form>
 			</div>

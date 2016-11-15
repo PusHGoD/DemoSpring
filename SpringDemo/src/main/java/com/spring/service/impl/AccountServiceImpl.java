@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
 
 	/**
 	 * @param size
-	 * @return
+	 * @return randomized password
 	 */
 	public String randomPassword(int size) {
 		Random random = new Random();
@@ -95,6 +95,10 @@ public class AccountServiceImpl implements AccountService {
 		return pass;
 	}
 
+	/**
+	 * @param input
+	 * @return MD5 encrypted string (32 characters)
+	 */
 	public String encryptMD5(String input) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("MD5");

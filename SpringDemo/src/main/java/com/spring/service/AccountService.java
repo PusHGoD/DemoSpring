@@ -32,7 +32,7 @@ public interface AccountService {
 	public boolean updateAccountInfo(Account input);
 	
 	/**
-	 * @return
+	 * @return List
 	 */
 	public List<Account> getAccountList();
 	
@@ -41,7 +41,7 @@ public interface AccountService {
 	 * @param from
 	 * @param to
 	 * @param passSize
-	 * @return
+	 * @return add result
 	 */
 	public boolean addNewAccount(Account input, String from, String to, int passSize);
 	
@@ -49,7 +49,7 @@ public interface AccountService {
 	 * @param from
 	 * @param to
 	 * @param password
-	 * @return
+	 * @return reset password result
 	 */
 	public boolean resetPassword(Account input, String from, String to);
 }

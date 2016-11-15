@@ -23,7 +23,7 @@ public interface AccountDAO {
 	public boolean updateInfo(Account account);
 
 	/**
-	 * @return
+	 * @return list
 	 */
 	public List<Account> findAll();
 
@@ -35,7 +35,7 @@ public interface AccountDAO {
 	/**
 	 * @param account
 	 * @param password
-	 * @return
+	 * @return update result
 	 */
 	public boolean updatePassword(Account account, String password);
 	

@@ -186,7 +186,9 @@ public class AccountController {
 
 	@RequestMapping(value = "/list", method = RequestMethod.GET, headers = "Accept=*/*", produces = "application/json")
 	public @ResponseBody String loadAccountList() throws JsonProcessingException {
+		// Get list
 		List<Account> list = service.getAccountList();
+		// Convert list into JSON type
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(list);
 	}
@@ -194,23 +196,28 @@ public class AccountController {
 	@RequestMapping(value = "/add", method = RequestMethod.POST)
 	public @ResponseBody String addAccount(@RequestBody Account account) {
 		try {
-			// Update account and get result
+			// Add account and get result
 			boolean result = service.addNewAccount(account, "minhhuan@test.com", account.getEmail(), 9);
-			// Check if update operation is successful
+			// Check if the operation is successful
 			if (result) {
-				// Redirect to home page
+				// Return message
 				return "You have added new user!";
 			} else {
-				// Redirect to home page
+				// Return message
 				return "Error in adding user!";
 			}
 		} catch (HibernateException e) {
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
+		// Return message
 		return "Error occurred in DB processing";
 	}
 
+	/**
+	 * @param account
+	 * @return
+	 */
 	@RequestMapping(value = "/edit", method = RequestMethod.POST)
 	public @ResponseBody String editAccount(@RequestBody Account account) {
 		try {
@@ -218,36 +225,42 @@ public class AccountController {
 			boolean result = service.updateAccountInfo(account);
 			// Check if update operation is successful
 			if (result) {
-				// Redirect to home page
-				return "You have updated user "+account.getUserName()+"!";
+				// Return message
+				return "You have updated user " + account.getUserName() + "!";
 			} else {
-				// Redirect to home page
+				// Return message
 				return "Error in updating user!";
 			}
 		} catch (HibernateException e) {
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
+		// Return message
 		return "Error occurred in DB processing";
 	}
 
+	/**
+	 * @param account
+	 * @return
+	 */
 	@RequestMapping(value = "/reset", method = RequestMethod.POST)
 	public @ResponseBody String resetPassword(@RequestBody Account account) {
 		try {
-			// Update account and get result
+			// Reset password and get result
 			boolean result = service.resetPassword(account, "minhhuan@test.com", account.getEmail());
 			// Check if update operation is successful
 			if (result) {
-				// Redirect to home page
+				// Return message
 				return "You have resetted password of " + account.getUserName() + "!";
 			} else {
-				// Redirect to home page
+				// Return message
 				return "Error in resetting password!";
 			}
 		} catch (HibernateException e) {
 			// Log Hibernate error message
 			logger.error("Error in processing request in DB :" + e.getMessage());
 		}
+		// Return message
 		return "Error occurred in DB processing";
 	}
 
