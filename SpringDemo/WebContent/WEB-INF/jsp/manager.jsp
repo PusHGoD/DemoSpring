@@ -93,7 +93,6 @@
 					<!-- JSON auto-generated table -->
 					<table id="table" class="table" data-method="POST"
 						data-show-toggle="true" data-toolbar="#toolbar"
-						data-pagination="true" data-page-list="[10, 20, 50, 100, 200]"
 						data-content-type="application/json">
 						<thead>
 							<tr>
@@ -106,7 +105,7 @@
 								<th data-field="email">Email</th>
 								<th data-field="active" data-formatter="activeFormatter">Active</th>
 								<th data-field="action" data-formatter="actionFormatter"
-									data-events="actionEvents"></th>
+									data-events="actionEvents">Action</th>
 							</tr>
 						</thead>
 					</table>

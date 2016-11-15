@@ -119,7 +119,7 @@ public class AccountServiceTest {
 		acc.setActive(true);
 		when(testDAO.addAccount(acc)).thenReturn(true);
 		Assert.assertTrue(
-				service.addNewAccount(acc, "danhlt@localhost.localdomain", "danhlt2@localhost.localdomain", 5));
+				service.addNewAccount(acc, "danhlt@test.com", "danhlt@test.com", 5));
 	}
 
 	@Test
@@ -127,7 +127,7 @@ public class AccountServiceTest {
 		Account acc = null;
 		when(testDAO.addAccount(acc)).thenReturn(false);
 		Assert.assertFalse(
-				service.addNewAccount(acc, "danhlt@localhost.localdomain", "danhlt2@localhost.localdomain", 5));
+				service.addNewAccount(acc, "danhlt@test.com", "danhlt@test.com", 5));
 	}
 
 	/* ============== updateInfo() ============== */
