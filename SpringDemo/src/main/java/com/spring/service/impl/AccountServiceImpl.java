@@ -1,16 +1,20 @@
 package com.spring.service.impl;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.math.BigInteger;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.AbstractMap;
-import java.util.Date;
+import java.util.List;
 import java.util.Map.Entry;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.spring.dao.AccountDAO;
 import com.spring.entity.Account;
+import com.spring.entity.Role;
+import com.spring.mail.CustomMailHandler;
 import com.spring.service.AccountService;
 
 /**
@@ -25,6 +29,8 @@ public class AccountServiceImpl implements AccountService {
 	@Autowired
 	private AccountDAO dao;
 
+	private CustomMailHandler mail = new CustomMailHandler();
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -34,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
 	public Entry<Integer, Account> checkLogin(String username, String password) {
 		Entry<Integer, Account> result = null;
 		// Call to DAO and get account information
-		Account accountInfo = dao.findByUserNameAndPassword(username, password);
+		Account accountInfo = dao.findByUserNameAndPassword(username, encryptMD5(password));
 		// If result is null, return null
 		if (accountInfo != null) {
 			// If account is inactive, return empty result
@@ -57,38 +63,89 @@ public class AccountServiceImpl implements AccountService {
 	 * com.spring.service.AccountService#updateAccountInfo(com.spring.entity.
 	 * Account, java.lang.String)
 	 */
-	public boolean updateAccountInfo(Account input, String strDOB) throws ParseException {
+	public boolean updateAccountInfo(Account input) {
 		if (input != null) {
-			// Convert string date of birth to Date object
-			Date dob = formatDate(strDOB);
-			// Set date into account info
-			input.setDateOfBirth(dob);
 			// Update and return result
 			return dao.updateInfo(input);
 		}
 		return false;
 	}
 
-	/**
-	 * A thread-safe method to store SimpleDateFormat
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#getAccountList()
 	 */
-	private static final ThreadLocal<SimpleDateFormat> tl = new ThreadLocal<SimpleDateFormat>() {
-		@Override
-		protected SimpleDateFormat initialValue() {
-			SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-			return sdf;
-		}
-	};
+	public List<Account> getAccountList() {
+		return dao.findAll();
+	}
 
 	/**
-	 * @param s
-	 * @return formatted date
-	 * @throws ParseException
+	 * @param size
+	 * @return randomized password
 	 */
-	public Date formatDate(String s) throws ParseException {
-		if (s == null || s.isEmpty()) {
-			return null;
+	public String randomPassword(int size) {
+		Random random = new Random();
+		String pass = "";
+		String randomValue = "1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM";
+		for (int i = 0; i < size; i++) {
+			int randomNum = random.nextInt(randomValue.length());
+			pass += randomValue.charAt(randomNum);
 		}
-		return tl.get().parse(s);
+		return pass;
+	}
+
+	/**
+	 * @param input
+	 * @return MD5 encrypted string (32 characters)
+	 */
+	public String encryptMD5(String input) {
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			byte[] messageDigest = md.digest(input.getBytes());
+			BigInteger number = new BigInteger(1, messageDigest);
+			String hashtext = number.toString(16);
+			while (hashtext.length() < 32) {
+				hashtext = "0" + hashtext;
+			}
+			return hashtext;
+		} catch (NoSuchAlgorithmException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#addNewAccount(com.spring.entity.
+	 * Account, java.lang.String)
+	 */
+	public boolean addNewAccount(Account input, String from, String to, int passSize) {
+		if (input != null) {
+			String enpass = randomPassword(passSize);
+			input.setPassword(encryptMD5(enpass));
+			Role role = new Role();
+			role.setId(2);
+			input.setRole(role);
+			mail.sendAddMail(from, to, input.getUserName(), enpass);
+			return dao.addAccount(input);
+		}
+		return false;
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.service.AccountService#resetPassword(java.lang.String,
+	 * java.lang.String, java.lang.String)
+	 */
+	public boolean resetPassword(Account input, String from, String to) {
+
+		if (input != null && from != null && to != null) {
+			String password = randomPassword(9);
+			mail.sendResetMail(from, to, password);
+			return dao.updatePassword(input, encryptMD5(password));
+		}
+		return false;
 	}
 }

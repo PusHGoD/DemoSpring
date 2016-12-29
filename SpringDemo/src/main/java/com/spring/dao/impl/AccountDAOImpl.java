@@ -1,5 +1,7 @@
 package com.spring.dao.impl;
 
+import java.util.List;
+
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
@@ -42,14 +44,46 @@ public class AccountDAOImpl extends GenericDAOImpl<Integer, Account> implements 
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public boolean updateInfo(Account account) {
 		if (account != null) {
-			// Inject sensitive info (password, active) to arg account
-			Account sensitiveInfo = this.findById(account.getId());
-			account.setPassword(sensitiveInfo.getPassword());
-			account.setActive(sensitiveInfo.isActive());
+			// Inject hidden info (password, active) to arg account
+			Account hiddenInfo = this.findById(account.getId());
+			account.setPassword(hiddenInfo.getPassword());
+			account.setRole(hiddenInfo.getRole());
 			// Update account and return result
 			return this.update(account);
 		} else
 			return false;
 	}
 
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.dao.AccountDAO#findAll()
+	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public List<Account> findAll() {
+		return this.find();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see com.spring.dao.impl.GenericDAOImpl#add(java.lang.Object)
+	 */
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public boolean addAccount(Account account) {
+		if (account != null) {
+			return this.add(account);
+		} else
+			return false;
+	}
+
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
+	public boolean updatePassword(Account account, String password) {
+		if (account != null && password != null) {
+			Account hiddenInfo = this.findById(account.getId());
+			hiddenInfo.setPassword(password);
+			return this.update(hiddenInfo);
+		} else
+			return false;
+	}
 }

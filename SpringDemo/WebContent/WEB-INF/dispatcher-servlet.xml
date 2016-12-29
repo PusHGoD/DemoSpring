@@ -25,8 +25,17 @@
 		</property>
 	</bean>
 
+	<bean id="jsonConverter"
+		class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+		<property name="supportedMediaTypes" value="application/json" />
+	</bean>
+
 	<!-- Account DAO implementation definition -->
 	<bean id="accountdao" class="com.spring.dao.impl.AccountDAOImpl">
+	</bean>
+
+	<!-- Account service definition -->
+	<bean id="accountService" class="com.spring.service.impl.AccountServiceImpl">
 	</bean>
 
 	<!-- Datasource definition -->
@@ -45,6 +54,7 @@
 		<property name="annotatedClasses">
 			<list>
 				<value>com.spring.entity.Account</value>
+				<value>com.spring.entity.Role</value>
 			</list>
 		</property>
 		<property name="hibernateProperties">
@@ -54,10 +64,6 @@
 				<prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
 			</props>
 		</property>
-	</bean>
-
-	<!-- Account service definition -->
-	<bean id="accountService" class="com.spring.service.impl.AccountServiceImpl">
 	</bean>
 
 	<!-- Hibernate 5 Transaction Manager definition -->

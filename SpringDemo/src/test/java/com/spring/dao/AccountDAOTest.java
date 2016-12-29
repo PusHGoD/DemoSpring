@@ -23,9 +23,10 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.spring.entity.Account;
+import com.spring.entity.Role;
 
 /**
- * @author HuanPM The Unit Test for AccountDAO
+ * @author HuanPM+QuangNND The Unit Test for AccountDAO
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { "classpath:/com/spring/configuration/test.xml" })
@@ -73,55 +74,13 @@ public class AccountDAOTest {
 	/* findByUserNameAndPassword */
 
 	@Test
-	public void testFindByUserNameAndPassword_NullUserNameAndNullPassword() {
-		Assert.assertNull(dao.findByUserNameAndPassword(null, null));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_NullUserNameAndNotNullPassword() {
-		Assert.assertNull(dao.findByUserNameAndPassword(null, "123"));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_NotNullUserNameAndNullPassword() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quang", null));
-	}
-
-	@Test
 	public void testFindByUserNameAndPassword_WrongPassword() {
 		Assert.assertNull(dao.findByUserNameAndPassword("quang", "1234"));
 	}
 
 	@Test
-	public void testFindByUserNameAndPassword_WrongUserName() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quangque", "123"));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_WrongUserNameAndWrongPassword() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quangque", "qxyzt"));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_UsernameTooLong() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa", "123"));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_PasswordTooLong() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quang", "123456789123456789123456789123456789"));
-	}
-
-	@Test
-	public void testFindByUserNameAndPassword_UsernameAndPasswordTooLong() {
-		Assert.assertNull(dao.findByUserNameAndPassword("quangquedsaaaaaaaaaaaaaaaaaajkkkkkkaaaaaaaa",
-				"123456789123456789123456789123456789"));
-	}
-
-	@Test
 	public void testFindByUserNameAndPassword_CorrectUsernameAndPassword() {
 		Account result = dao.findByUserNameAndPassword("quang", "123");
-		Assert.assertNotNull(result);
 		Assert.assertEquals(new Integer(1), result.getId());
 		Assert.assertEquals("quang", result.getUserName());
 		Assert.assertEquals("123", result.getPassword());
@@ -137,328 +96,51 @@ public class AccountDAOTest {
 	}
 
 	@Test
-	public void testUpdateInfo_NullInput() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, null, null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_NullFirstName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, "Quang1", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-
-	}
-
-	@Test
-	public void testUpdateInfo_NullLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", null, sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-
-	}
-
-	@Test
-	public void testUpdateInfo_NullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", "Quang1", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_NullFirstNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, "Quang1", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_NullLastNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", null, null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_NullFirstNameAndNullLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, null, sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-
-	}
-
-	@Test
 	public void testUpdateInfo_LongFirstName() {
 		Account acc = null;
+		Role role = new Role("admin");
 		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", sdf.parse("12/12/1996"),
-					true);
+			acc = new Account(role, "quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1",
+					sdf.parse("12/12/1996"), "quang@mail.com", true);
 			acc.setId(1);
 			Assert.assertEquals(false, dao.updateInfo(acc));
 			fail("No exception is thrown!");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			fail("Parse exception is thrown unexpectedly!");
 		} catch (DataIntegrityViolationException e) {
 
 		}
 
-	}
-
-	@Test
-	public void testUpdateInfo_LongLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-			fail("No exception is thrown!");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_LongFirstNameAndNullLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-			fail("No exception is thrown!");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_LongLastNameAndNullFirstName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-			fail("No exception is thrown!");
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
 	}
 
 	@Test
 	public void testUpdateInfo_LongLastNameAndLongFirstName() {
 		Account acc = null;
+		Role role = new Role("admin");
 		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-					sdf.parse("12/12/1996"), true);
+			acc = new Account(role, "quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+					"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sdf.parse("12/12/1996"), "quang@mail.com", true);
 			acc.setId(1);
 			Assert.assertEquals(false, dao.updateInfo(acc));
 			fail("No exception is thrown!");
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			fail("Parse exception is thrown unexpectedly!");
 		} catch (DataIntegrityViolationException e) {
 
 		}
-	}
-
-	@Test
-	public void testUpdateInfo_LongFirstNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-			fail("No exception is thrown!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_LongLastNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-			fail("No exception is thrown!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_LongFirstNameAndLongLastNameNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-					null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryFirstName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(true, dao.updateInfo(acc));
-		} catch (ParseException e) {
-			fail("Parse exception is thrown unexpectedly!");
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(true, dao.updateInfo(acc));
-		} catch (ParseException e) {
-			fail("Parse exception is thrown unexpectedly!");
-		}
-
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryFirstNameAndNullLastName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (ParseException e) {
-
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryLastNameAndNullFirstName() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", null, "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", sdf.parse("12/12/1996"), true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (ParseException e) {
-
-			fail("Parse exception is thrown unexpectedly!");
-		} catch (DataIntegrityViolationException e) {
-
-		}
-
 	}
 
 	@Test
 	public void testUpdateInfo_BoundaryLastNameAndBoundaryFirstName() {
 		Account acc = null;
+		Role role = new Role("admin");
 		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
-					sdf.parse("12/12/1996"), true);
+			acc = new Account(role, "quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+					sdf.parse("12/12/1996"), "quang@mail.com", true);
 			acc.setId(1);
 			Assert.assertEquals(true, dao.updateInfo(acc));
 		} catch (ParseException e) {
 			fail("Parse exception is thrown unexpectedly!");
-		}
-
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryFirstNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "Quang1", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryLastNameAndNullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "Duy1", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null, true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
-		}
-	}
-
-	@Test
-	public void testUpdateInfo_BoundaryFirstNameAndBoundaryLastName_NullDate() {
-		Account acc = null;
-		try {
-			acc = new Account("quang", "123", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", null,
-					true);
-			acc.setId(1);
-			Assert.assertEquals(false, dao.updateInfo(acc));
-		} catch (DataIntegrityViolationException e) {
-
 		}
 
 	}
@@ -466,13 +148,52 @@ public class AccountDAOTest {
 	@Test
 	public void testUpdateInfo_ValidInputAndValidDate() {
 		Account acc = null;
+		Role role = new Role("admin");
 		try {
-			acc = new Account("quang1", "321", "Nguyen", "Quang1", sdf.parse("12/12/1996"), true);
+			acc = new Account(role, "quang", "123", "aaaaaaaaaaaaaaaa", "Quang1", sdf.parse("12/12/1996"),
+					"quang@mail.com", true);
 			acc.setId(1);
 			Assert.assertEquals(true, dao.updateInfo(acc));
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
 			fail("Parse exception is thrown unexpectedly!");
 		}
+	}
+
+	/* Update password */
+
+	@Test
+	public void testUpdatePassword_NullAccountAndNullPassword() {
+		Assert.assertEquals(false, dao.updatePassword(null, null));
+	}
+
+	@Test
+	public void testUpdatePassword_ValidAccountAndValidPassword() {
+		Assert.assertEquals(true, dao.updatePassword(dao.findByUserNameAndPassword("quang", "123"), "12345"));
+	}
+
+	@Test
+	public void testUpdatePassword_InvalidAccountAndValidPassword() {
+		Assert.assertEquals(false, dao.updatePassword(dao.findByUserNameAndPassword("quangque", "123"), "12345"));
+	}
+
+	/* Add account */
+
+	@Test
+	public void testAddAccount_NullAccount() {
+		Assert.assertEquals(false, dao.addAccount(null));
+	}
+
+	@Test
+	public void testAddAccount_ValidAccount() {
+		Role role = new Role();
+		role.setId(1);
+		Account acc;
+		try {
+			acc = new Account(role, "quang", "123", "Duy1", "Quang1", sdf.parse("12/12/1996"), "quang@mail.com", true);
+			Assert.assertEquals(true, dao.addAccount(acc));
+		} catch (ParseException e) {
+			fail("Parse exception thrown unexpectedly!");
+		}
+
 	}
 }

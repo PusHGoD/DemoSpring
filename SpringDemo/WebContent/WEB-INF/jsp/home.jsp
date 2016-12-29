@@ -8,6 +8,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -33,7 +34,7 @@
 </head>
 <body>
 	<!-- If user has not logged in yet, redirect to login page -->
-	<c:if test="${empty accountInfo}">
+	<c:if test="${empty accountInfo or accountInfo.role.id != 2}">
 		<c:redirect url="redirect.jsp" />
 	</c:if>
 	<!-- Format date to dd/mm/yyyy -->
@@ -56,6 +57,7 @@
 			</div>
 			<!-- Panel body -->
 			<div class="panel-body">
+				<div id="ajaxMessage"></div>
 				<!-- Success message -->
 				<c:if test="${not empty successMessage}">
 					<div class="alert alert-success">${successMessage}</div>
@@ -69,6 +71,7 @@
 					<div class="form-group">First name: ${accountInfo.firstName}</div>
 					<div class="form-group">Last name: ${accountInfo.lastName}</div>
 					<div class="form-group">Date of birth: ${formatedDate}</div>
+					<div class="form-group">Email: ${accountInfo.email}</div>
 					<!-- The modal show button -->
 					<input type="button" data-toggle="modal" data-target="#myModal"
 						class="btn btn-control btn-lg" value="Edit" />
@@ -92,37 +95,44 @@
 					<div class="modal-body">
 						<form:hidden path="id" value="${accountInfo.id}" />
 						<form:hidden path="userName" value="${accountInfo.userName}" />
+
 						<!-- First name -->
 						<div class="form-group">
 							First name:
 							<form:input path="firstName" type="text" class="form-control"
-								value="${accountInfo.firstName}" placeholder="First name"
-								id="firstname" />
+								value="${accountInfo.firstName}" placeholder="First name" />
 							<div id="firstname_error" class="text-danger"></div>
 						</div>
 						<!-- Last name -->
 						<div class="form-group">
 							Last name:
 							<form:input path="lastName" type="text" class="form-control"
-								value="${accountInfo.lastName}" placeholder="Last name"
-								id="lastname" />
+								value="${accountInfo.lastName}" placeholder="Last name" />
 							<div id="lastname_error" class="text-danger"></div>
 						</div>
 						<!-- Date of birth -->
 						<div class="form-group">
 							Date of birth:
 							<!-- Date picker -->
-							<input type="text" name="dateOfBirth" data-provide="datepicker"
-								class="form-control" data-date-format="dd/mm/yyyy"
-								value="${formatedDate}" placeholder="dd/mm/yyyy" id="dob" />
+							<form:input path="dateOfBirth" type="text"
+								data-provide="datepicker" class="form-control"
+								data-date-format="dd/mm/yyyy" value="${formatedDate}"
+								placeholder="dd/mm/yyyy" />
 							<div id="dob_error" class="text-danger"></div>
 						</div>
+						<!--  Email -->
+						<div class="form-group">
+							Email:
+							<form:input path="email" type="text" class="form-control"
+								value="${accountInfo.email}" placeholder="xxx@yyy.com" />
+							<div id="email_error" class="text-danger"></div>
+						</div>
 					</div>
+					<form:hidden path="active" value="${accountInfo.active}" />
 					<!-- Modal footer -->
 					<div class="modal-footer">
 						<button type="button" class="btn btn-link" data-dismiss="modal">Cancel</button>
-						<button type="button" class="btn btn-primary"
-							onclick="submit_form();">Save</button>
+						<button type="button" class="btn btn-primary" id="user-update-btn">Update</button>
 					</div>
 				</div>
 				<!-- /.modal-content -->

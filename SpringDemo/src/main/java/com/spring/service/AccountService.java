@@ -1,6 +1,7 @@
 package com.spring.service;
 
 import java.text.ParseException;
+import java.util.List;
 import java.util.Map.Entry;
 
 import org.springframework.stereotype.Service;
@@ -28,5 +29,27 @@ public interface AccountService {
 	 * @return update result
 	 * @throws ParseException
 	 */
-	public boolean updateAccountInfo(Account input, String strDOB) throws ParseException;
+	public boolean updateAccountInfo(Account input);
+	
+	/**
+	 * @return List
+	 */
+	public List<Account> getAccountList();
+	
+	/**
+	 * @param input
+	 * @param from
+	 * @param to
+	 * @param passSize
+	 * @return add result
+	 */
+	public boolean addNewAccount(Account input, String from, String to, int passSize);
+	
+	/**
+	 * @param from
+	 * @param to
+	 * @param password
+	 * @return reset password result
+	 */
+	public boolean resetPassword(Account input, String from, String to);
 }

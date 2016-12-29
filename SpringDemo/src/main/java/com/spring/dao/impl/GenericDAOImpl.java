@@ -3,9 +3,9 @@ package com.spring.dao.impl;
 import java.io.Serializable;
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.GenericTypeResolver;
 import org.springframework.transaction.annotation.Propagation;
@@ -48,12 +48,8 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	public List<E> find() {
 		// Get current session
 		Session session = sessionFactory.getCurrentSession();
-		// Set up query
-		Query<E> query = session.createQuery("FROM :tablename");
-		query.setParameter("tablename", this.getGenericType().getName());
-		// Get result from query
-		List<E> list = query.getResultList();
-		return list;
+		Criteria criteria = session.createCriteria(this.getGenericType());
+		return (List<E>) criteria.list();
 	}
 
 	/*
@@ -76,12 +72,15 @@ public class GenericDAOImpl<K extends Serializable, E> implements GenericDAO<K, 
 	 * @see com.spring.dao.GenericDAO#add(java.lang.Object)
 	 */
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	public K add(E e) {
+	public boolean add(E e) {
 		// Get current session
-		Session session = sessionFactory.getCurrentSession();
-		// Save e to session
-		K k = (K) session.save(e);
-		return k;
+		if (e != null) {
+			Session session = sessionFactory.getCurrentSession();
+			// Save e to session
+			session.save(e);
+			return true;
+		}
+		return false;
 	}
 
 	/*

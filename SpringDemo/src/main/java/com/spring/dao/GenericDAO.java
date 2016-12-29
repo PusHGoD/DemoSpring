@@ -26,9 +26,9 @@ public interface GenericDAO<K extends Serializable, E> {
 
 	/**
 	 * @param e
-	 * @return id K
+	 * @return add result
 	 */
-	public K add(E e);
+	public boolean add(E e);
 
 	/**
 	 * @param e

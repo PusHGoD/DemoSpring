@@ -7,6 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -54,8 +55,7 @@
 			</div>
 			<!-- Login button -->
 			<input type="submit" value="Login"
-				class="btn btn-primary btn-lg btn-block"
-				onclick="return checkLoginInput();" />
+				class="btn btn-primary btn-lg btn-block" id="login-btn" />
 		</form:form>
 	</div>
 </body>
